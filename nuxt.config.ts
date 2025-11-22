@@ -1,4 +1,33 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+
+  modules: [
+    '@nuxtjs/tailwindcss',
+  ],
+
+  tailwindcss: {
+    cssPath: '~/assets/css/tailwind.css',
+    configPath: 'tailwind.config.ts',
+    exposeConfig: false,
+    viewer: true,
+  },
+
+  app: {
+    head: {
+      title: 'Craft Brew Catalog | Premium Beer Discovery',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.' },
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' },
+      ],
+    },
+  },
+
+  compatibilityDate: '2024-04-03',
 })
