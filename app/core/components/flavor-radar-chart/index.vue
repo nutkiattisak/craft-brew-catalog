@@ -34,17 +34,22 @@ const polygonPoints = computed(() => {
   return points.join(' ')
 })
 
-// Calculate label positions
+// Calculate label positions and data points
 const labelPositions = computed(() => {
   const angleStep = (Math.PI * 2) / 6
   return labels.map((label, index) => {
     const angle = angleStep * index - Math.PI / 2
     const labelRadius = maxRadius.value + 20
+    const key = dataKeys[index]!
+    const value = props.flavorProfile[key]
+    const dataRadius = (value / 100) * maxRadius.value
     return {
       label,
       x: center.value + labelRadius * Math.cos(angle),
       y: center.value + labelRadius * Math.sin(angle),
-      value: props.flavorProfile[dataKeys[index]],
+      value,
+      pointX: center.value + dataRadius * Math.cos(angle),
+      pointY: center.value + dataRadius * Math.sin(angle),
     }
   })
 })
@@ -132,18 +137,8 @@ const gridLines = computed(() => {
       <circle
         v-for="(pos, index) in labelPositions"
         :key="`point-${index}`"
-        :cx="
-          center +
-          (flavorProfile[dataKeys[index]] / 100) *
-            maxRadius *
-            Math.cos(((Math.PI * 2) / 6) * index - Math.PI / 2)
-        "
-        :cy="
-          center +
-          (flavorProfile[dataKeys[index]] / 100) *
-            maxRadius *
-            Math.sin(((Math.PI * 2) / 6) * index - Math.PI / 2)
-        "
+        :cx="pos.pointX"
+        :cy="pos.pointY"
         r="4"
         fill="#fbbf24"
         class="transition-all duration-500"
