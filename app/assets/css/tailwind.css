@@ -121,8 +121,32 @@
     @apply scroll-smooth;
   }
 
+  /* Dark mode (default) */
   body {
     @apply bg-midnight-950 text-foam-100 font-sans antialiased;
+  }
+
+  /* Light mode */
+  .light body {
+    @apply bg-foam-50 text-midnight-900;
+  }
+
+  .light {
+    --color-midnight-950: #fefefe;
+    --color-midnight-900: #f8f8f8;
+    --color-midnight-800: #f0f0f0;
+    --color-midnight-700: #e0e0e0;
+    --color-midnight-600: #d0d0d0;
+    --color-midnight-500: #b0b0b0;
+    --color-midnight-400: #909090;
+    --color-midnight-300: #707070;
+
+    --color-foam-50: #0a0a0b;
+    --color-foam-100: #1a1a1e;
+    --color-foam-200: #252529;
+    --color-foam-300: #3d3d44;
+    --color-foam-400: #52525b;
+    --color-foam-500: #71717a;
   }
 
   /* Custom scrollbar for dark theme */
