@@ -7,7 +7,12 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "prepare": "husky",
+    "lint:eslint": "eslint .",
+    "lint:check-prettier": "prettier --check .",
+    "lint:prettier": "prettier --write --list-different .",
+    "lint:fix": "pnpm lint:prettier && pnpm lint:eslint --fix"
   },
   "dependencies": {
     "@vueuse/core": "^12.0.0",
@@ -17,14 +22,21 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.10.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
     "radix-vue": "^1.9.17",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.0.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@9.15.0"
 }

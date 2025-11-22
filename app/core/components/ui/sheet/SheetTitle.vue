@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import type { HTMLAttributes } from 'vue'
+import { DialogTitle } from 'radix-vue'
+import { cn } from '~/core/lib/utils'
+
+interface Props {
+  class?: HTMLAttributes['class']
+}
+
+const props = defineProps<Props>()
+</script>
+
+<template>
+  <DialogTitle :class="cn('text-lg font-semibold text-foam-50', props.class)">
+    <slot />
+  </DialogTitle>
+</template>
