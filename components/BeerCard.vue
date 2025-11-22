@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Heart, ShoppingCart, Star, Sparkles } from 'lucide-vue-next'
+import { Card, CardContent } from '~/components/ui/card'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import type { Beer } from '~/types/beer'
 
 interface Props {
@@ -28,7 +31,6 @@ function handleCartClick(e: Event) {
 }
 
 function getBitternessLevel(ibu: number): number {
-  // Convert IBU to 5-point scale
   if (ibu <= 15) return 1
   if (ibu <= 30) return 2
   if (ibu <= 50) return 3
@@ -38,9 +40,9 @@ function getBitternessLevel(ibu: number): number {
 </script>
 
 <template>
-  <article
+  <Card
     @click="handleCardClick"
-    class="group relative bg-midnight-800/50 rounded-2xl overflow-hidden border border-midnight-700/50 card-hover cursor-pointer"
+    class="group relative overflow-hidden card-hover cursor-pointer"
   >
     <!-- Image Container -->
     <div class="relative aspect-[3/4] overflow-hidden">
@@ -55,23 +57,25 @@ function getBitternessLevel(ibu: number): number {
 
       <!-- Badges -->
       <div class="absolute top-3 left-3 flex flex-col gap-2">
-        <span v-if="beer.isNew" class="badge badge-amber flex items-center gap-1">
+        <Badge v-if="beer.isNew" variant="amber" class="flex items-center gap-1">
           <Sparkles class="w-3 h-3" />
           New
-        </span>
-        <span v-if="beer.isFeatured" class="badge bg-purple-500/20 text-purple-400 border border-purple-500/30">
+        </Badge>
+        <Badge v-if="beer.isFeatured" variant="purple">
           Featured
-        </span>
+        </Badge>
       </div>
 
       <!-- Wishlist Button -->
-      <button
+      <Button
         @click="handleWishlistClick"
-        class="absolute top-3 right-3 p-2 rounded-full bg-midnight-900/60 backdrop-blur-sm border border-midnight-700/50 transition-all hover:bg-midnight-800 hover:scale-110"
+        variant="ghost"
+        size="icon"
+        class="absolute top-3 right-3 rounded-full bg-midnight-900/60 backdrop-blur-sm border border-midnight-700/50 hover:bg-midnight-800 hover:scale-110 transition-all"
         :class="{ 'text-red-500': isInWishlist(beer.id), 'text-foam-300': !isInWishlist(beer.id) }"
       >
         <Heart class="w-5 h-5" :fill="isInWishlist(beer.id) ? 'currentColor' : 'none'" />
-      </button>
+      </Button>
 
       <!-- Quick Stats Overlay -->
       <div class="absolute bottom-0 left-0 right-0 p-4">
@@ -90,10 +94,10 @@ function getBitternessLevel(ibu: number): number {
     </div>
 
     <!-- Content -->
-    <div class="p-4">
+    <CardContent class="p-4">
       <!-- Style Badge -->
       <div class="mb-2">
-        <span class="badge badge-slate text-xs">{{ beer.style }}</span>
+        <Badge variant="secondary" class="text-xs">{{ beer.style }}</Badge>
       </div>
 
       <!-- Name & Brewery -->
@@ -123,17 +127,16 @@ function getBitternessLevel(ibu: number): number {
         <div>
           <span class="text-2xl font-bold text-foam-50">${{ beer.price.toFixed(2) }}</span>
         </div>
-        <button
+        <Button
           @click="handleCartClick"
-          class="flex items-center gap-2 px-4 py-2 rounded-xl transition-all"
-          :class="isInCart(beer.id)
-            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-            : 'bg-amber-500 text-midnight-950 hover:bg-amber-400 shadow-lg shadow-amber-500/20'"
+          :variant="isInCart(beer.id) ? 'outline' : 'default'"
+          size="sm"
+          :class="isInCart(beer.id) ? 'bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30' : ''"
         >
           <ShoppingCart class="w-4 h-4" />
           <span class="text-sm font-semibold">{{ isInCart(beer.id) ? 'Added' : 'Add' }}</span>
-        </button>
+        </Button>
       </div>
-    </div>
-  </article>
+    </CardContent>
+  </Card>
 </template>

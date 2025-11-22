@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Package } from 'lucide-vue-next'
+import { Button } from '~/components/ui/button'
 import type { Beer } from '~/types/beer'
 
 const { filteredBeers, openBeerModal } = useBeerStore()
@@ -53,11 +54,11 @@ function handleBeerClick(beer: Beer) {
         />
       </div>
 
-      <!-- Load More (Placeholder) -->
+      <!-- Load More -->
       <div class="flex justify-center mt-12">
-        <button class="btn-secondary px-8 py-3">
+        <Button variant="outline" size="lg">
           Load More Beers
-        </button>
+        </Button>
       </div>
     </div>
   </section>

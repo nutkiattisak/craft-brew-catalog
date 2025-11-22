@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { Beer, Search, User, ShoppingCart, Heart, Menu, X } from 'lucide-vue-next'
+import { Beer, User, ShoppingCart, Heart, Menu } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { Button } from '~/components/ui/button'
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '~/components/ui/sheet'
+import { Separator } from '~/components/ui/separator'
 
 const { cart, wishlist } = useBeerStore()
 const isMobileMenuOpen = ref(false)
@@ -10,10 +13,6 @@ if (typeof window !== 'undefined') {
   window.addEventListener('scroll', () => {
     isScrolled.value = window.scrollY > 50
   })
-}
-
-function toggleMobileMenu() {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 </script>
 
@@ -51,7 +50,7 @@ function toggleMobileMenu() {
         <!-- Actions -->
         <div class="flex items-center gap-2 lg:gap-4">
           <!-- Wishlist -->
-          <button class="relative p-2 lg:p-3 rounded-xl hover:bg-midnight-800/50 transition-colors group">
+          <Button variant="ghost" size="icon" class="relative">
             <Heart class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 group-hover:text-amber-400 transition-colors" />
             <span
               v-if="wishlist.length > 0"
@@ -59,10 +58,10 @@ function toggleMobileMenu() {
             >
               {{ wishlist.length }}
             </span>
-          </button>
+          </Button>
 
           <!-- Cart -->
-          <button class="relative p-2 lg:p-3 rounded-xl hover:bg-midnight-800/50 transition-colors group">
+          <Button variant="ghost" size="icon" class="relative">
             <ShoppingCart class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 group-hover:text-amber-400 transition-colors" />
             <span
               v-if="cart.length > 0"
@@ -70,49 +69,62 @@ function toggleMobileMenu() {
             >
               {{ cart.length }}
             </span>
-          </button>
+          </Button>
 
           <!-- User Profile / My Cellar -->
-          <button class="hidden sm:flex items-center gap-2 px-3 lg:px-4 py-2 rounded-xl bg-midnight-800/50 hover:bg-midnight-700/50 border border-midnight-700 transition-all group">
-            <User class="w-5 h-5 text-foam-300 group-hover:text-amber-400 transition-colors" />
-            <span class="text-sm font-medium text-foam-200">My Cellar</span>
-          </button>
+          <Button variant="outline" class="hidden sm:flex">
+            <User class="w-5 h-5" />
+            <span class="text-sm font-medium">My Cellar</span>
+          </Button>
 
           <!-- Mobile Menu Button -->
-          <button
-            @click="toggleMobileMenu"
-            class="lg:hidden p-2 rounded-xl hover:bg-midnight-800/50 transition-colors"
-          >
-            <Menu v-if="!isMobileMenuOpen" class="w-6 h-6 text-foam-300" />
-            <X v-else class="w-6 h-6 text-foam-300" />
-          </button>
+          <Sheet v-model:open="isMobileMenuOpen">
+            <SheetTrigger as-child>
+              <Button variant="ghost" size="icon" class="lg:hidden">
+                <Menu class="w-6 h-6 text-foam-300" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" class="w-80">
+              <SheetHeader>
+                <SheetTitle>
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
+                      <Beer class="w-5 h-5 text-midnight-950" />
+                    </div>
+                    <div>
+                      <span class="text-lg font-bold text-foam-50">CraftBrew</span>
+                    </div>
+                  </div>
+                </SheetTitle>
+              </SheetHeader>
+
+              <Separator class="my-4" />
+
+              <nav class="space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
+                  Discover
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
+                  Breweries
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
+                  Events
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
+                  About
+                </a>
+              </nav>
+
+              <Separator class="my-4" />
+
+              <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
+                <User class="w-5 h-5" />
+                My Cellar
+              </a>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </div>
-
-    <!-- Mobile Menu -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-4"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-4"
-    >
-      <div v-if="isMobileMenuOpen" class="lg:hidden glass-dark border-t border-midnight-700">
-        <nav class="px-4 py-4 space-y-2">
-          <a href="#" class="block px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">Discover</a>
-          <a href="#" class="block px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">Breweries</a>
-          <a href="#" class="block px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">Events</a>
-          <a href="#" class="block px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">About</a>
-          <div class="pt-2 border-t border-midnight-700">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors">
-              <User class="w-5 h-5" />
-              My Cellar
-            </a>
-          </div>
-        </nav>
-      </div>
-    </Transition>
   </header>
 </template>
