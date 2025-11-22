@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { Hop, Wheat, Cherry, Moon, Apple, Flame, Filter, ChevronDown } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { Hop, Wheat, Cherry, Moon, Apple, Flame, Filter, ChevronDown, Check } from 'lucide-vue-next'
+import { Button } from '~/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '~/components/ui/dropdown-menu'
 import type { FilterTag, SortOption } from '~/types/beer'
 
 const { activeFilter, setActiveFilter, sortOption, setSortOption } = useBeerStore()
-
-const showSortDropdown = ref(false)
 
 interface FilterOption {
   id: FilterTag
@@ -37,7 +41,6 @@ function handleFilterClick(filter: FilterTag) {
 
 function handleSortChange(option: SortOption) {
   setSortOption(option)
-  showSortDropdown.value = false
 }
 
 function getCurrentSortLabel() {
@@ -52,58 +55,45 @@ function getCurrentSortLabel() {
         <!-- Filter Pills (Horizontal Scrollable) -->
         <div class="flex-1 overflow-hidden">
           <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 -mb-1">
-            <button
+            <Button
               v-for="filter in filters"
               :key="filter.id"
               @click="handleFilterClick(filter.id)"
-              class="filter-pill flex items-center gap-2 flex-shrink-0"
-              :class="{ 'filter-pill-active': activeFilter === filter.id }"
+              :variant="activeFilter === filter.id ? 'default' : 'outline'"
+              size="sm"
+              class="flex-shrink-0 rounded-full"
+              :class="activeFilter === filter.id
+                ? 'bg-amber-500/20 text-amber-400 border-amber-500/50 hover:bg-amber-500/30'
+                : 'hover:border-midnight-600'"
             >
               <component :is="filter.icon" class="w-4 h-4" />
               <span>{{ filter.label }}</span>
-            </button>
+            </Button>
           </div>
         </div>
 
         <!-- Sort Dropdown -->
-        <div class="relative flex-shrink-0">
-          <button
-            @click="showSortDropdown = !showSortDropdown"
-            class="flex items-center gap-2 px-4 py-2 rounded-xl bg-midnight-800 border border-midnight-700 hover:border-midnight-600 transition-colors"
-          >
-            <span class="text-sm font-medium text-foam-200 hidden sm:inline">{{ getCurrentSortLabel() }}</span>
-            <span class="text-sm font-medium text-foam-200 sm:hidden">Sort</span>
-            <ChevronDown
-              class="w-4 h-4 text-foam-400 transition-transform"
-              :class="{ 'rotate-180': showSortDropdown }"
-            />
-          </button>
-
-          <!-- Dropdown Menu -->
-          <Transition
-            enter-active-class="transition-all duration-200 ease-out"
-            enter-from-class="opacity-0 scale-95 -translate-y-2"
-            enter-to-class="opacity-100 scale-100 translate-y-0"
-            leave-active-class="transition-all duration-150 ease-in"
-            leave-from-class="opacity-100 scale-100 translate-y-0"
-            leave-to-class="opacity-0 scale-95 -translate-y-2"
-          >
-            <div
-              v-if="showSortDropdown"
-              class="absolute right-0 mt-2 w-48 py-2 rounded-xl glass border border-midnight-700 shadow-xl"
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="outline" size="sm" class="flex-shrink-0">
+              <span class="hidden sm:inline">{{ getCurrentSortLabel() }}</span>
+              <span class="sm:hidden">Sort</span>
+              <ChevronDown class="w-4 h-4 ml-1" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-48">
+            <DropdownMenuItem
+              v-for="option in sortOptions"
+              :key="option.id"
+              @click="handleSortChange(option.id)"
+              class="flex items-center justify-between"
+              :class="sortOption === option.id ? 'text-amber-400 bg-amber-500/10' : ''"
             >
-              <button
-                v-for="option in sortOptions"
-                :key="option.id"
-                @click="handleSortChange(option.id)"
-                class="w-full px-4 py-2.5 text-left text-sm transition-colors"
-                :class="sortOption === option.id ? 'text-amber-400 bg-amber-500/10' : 'text-foam-200 hover:bg-midnight-700/50'"
-              >
-                {{ option.label }}
-              </button>
-            </div>
-          </Transition>
-        </div>
+              {{ option.label }}
+              <Check v-if="sortOption === option.id" class="w-4 h-4" />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   </section>

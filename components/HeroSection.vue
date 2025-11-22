@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Search, Sparkles } from 'lucide-vue-next'
 import { ref } from 'vue'
+import { Button } from '~/components/ui/button'
+import { Badge } from '~/components/ui/badge'
 
 const { setSearchQuery, searchQuery } = useBeerStore()
 const localSearch = ref(searchQuery.value)
@@ -14,10 +16,15 @@ function handleKeydown(e: KeyboardEvent) {
     handleSearch()
   }
 }
+
+function handleTagClick(tag: string) {
+  localSearch.value = tag
+  handleSearch()
+}
 </script>
 
 <template>
-  <section class="relative min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden">
+  <section class="relative min-h-[70vh] lg:min-h-[100vh] flex items-center justify-center overflow-hidden">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
       <div
@@ -35,10 +42,10 @@ function handleKeydown(e: KeyboardEvent) {
     <!-- Content -->
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
       <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6 animate-fade-in">
-        <Sparkles class="w-4 h-4 text-amber-400" />
-        <span class="text-sm font-medium text-amber-400">Discover 500+ Craft Beers</span>
-      </div>
+      <Badge variant="amber" class="px-4 py-2 mb-6 animate-fade-in">
+        <Sparkles class="w-4 h-4 mr-2" />
+        <span class="text-sm font-medium">Discover 500+ Craft Beers</span>
+      </Badge>
 
       <!-- Heading -->
       <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-foam-50 mb-6 animate-slide-up">
@@ -66,26 +73,28 @@ function handleKeydown(e: KeyboardEvent) {
               class="w-full pl-14 pr-32 py-4 lg:py-5 bg-midnight-800/60 backdrop-blur-xl border border-midnight-700/50 rounded-2xl text-foam-100 placeholder-foam-400/50 text-lg focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
               @keydown="handleKeydown"
             />
-            <button
+            <Button
               @click="handleSearch"
-              class="absolute right-3 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-midnight-950 font-semibold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30"
+              class="absolute right-3"
             >
               Search
-            </button>
+            </Button>
           </div>
         </div>
 
         <!-- Quick Search Tags -->
         <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
           <span class="text-sm text-foam-400">Popular:</span>
-          <button
+          <Button
             v-for="tag in ['IPA', 'Stout', 'Lager', 'Sour', 'Belgian']"
             :key="tag"
-            @click="localSearch = tag; handleSearch()"
-            class="px-3 py-1.5 text-sm text-foam-300 bg-midnight-800/50 hover:bg-midnight-700/50 rounded-lg border border-midnight-700/50 hover:border-amber-500/30 hover:text-amber-400 transition-all"
+            @click="handleTagClick(tag)"
+            variant="outline"
+            size="sm"
+            class="hover:border-amber-500/30 hover:text-amber-400"
           >
             {{ tag }}
-          </button>
+          </Button>
         </div>
       </div>
 

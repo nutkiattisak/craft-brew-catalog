@@ -6,6 +6,15 @@ export default defineNuxtConfig({
 
   modules: [],
 
+  components: {
+    dirs: [
+      {
+        path: '~/components',
+        ignore: ['**/ui/**/index.ts'],
+      },
+    ],
+  },
+
   css: ['~/assets/css/tailwind.css'],
 
   vite: {

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Beer, Facebook, Twitter, Instagram, Youtube, Mail } from 'lucide-vue-next'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Separator } from '~/components/ui/separator'
 </script>
 
 <template>
@@ -21,19 +24,19 @@ import { Beer, Facebook, Twitter, Instagram, Youtube, Mail } from 'lucide-vue-ne
           <p class="text-sm text-foam-400 mb-6">
             Discover the finest craft beers from around the world. Curated selections for the discerning beer enthusiast.
           </p>
-          <div class="flex items-center gap-4">
-            <a href="#" class="p-2 rounded-lg bg-midnight-800 text-foam-400 hover:text-amber-400 hover:bg-midnight-700 transition-colors">
+          <div class="flex items-center gap-2">
+            <Button variant="ghost" size="icon" class="hover:text-amber-400">
               <Facebook class="w-5 h-5" />
-            </a>
-            <a href="#" class="p-2 rounded-lg bg-midnight-800 text-foam-400 hover:text-amber-400 hover:bg-midnight-700 transition-colors">
+            </Button>
+            <Button variant="ghost" size="icon" class="hover:text-amber-400">
               <Twitter class="w-5 h-5" />
-            </a>
-            <a href="#" class="p-2 rounded-lg bg-midnight-800 text-foam-400 hover:text-amber-400 hover:bg-midnight-700 transition-colors">
+            </Button>
+            <Button variant="ghost" size="icon" class="hover:text-amber-400">
               <Instagram class="w-5 h-5" />
-            </a>
-            <a href="#" class="p-2 rounded-lg bg-midnight-800 text-foam-400 hover:text-amber-400 hover:bg-midnight-700 transition-colors">
+            </Button>
+            <Button variant="ghost" size="icon" class="hover:text-amber-400">
               <Youtube class="w-5 h-5" />
-            </a>
+            </Button>
           </div>
         </div>
 
@@ -70,21 +73,21 @@ import { Beer, Facebook, Twitter, Instagram, Youtube, Mail } from 'lucide-vue-ne
           <div class="flex gap-2">
             <div class="flex-1 relative">
               <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foam-500" />
-              <input
+              <Input
                 type="email"
                 placeholder="Your email"
-                class="w-full pl-10 pr-4 py-2.5 bg-midnight-800 border border-midnight-700 rounded-lg text-sm text-foam-100 placeholder-foam-500 focus:outline-none focus:border-amber-500/50"
+                class="pl-10"
               />
             </div>
-            <button class="px-4 py-2.5 bg-amber-500 text-midnight-950 font-semibold rounded-lg hover:bg-amber-400 transition-colors">
-              Join
-            </button>
+            <Button>Join</Button>
           </div>
         </div>
       </div>
 
+      <Separator />
+
       <!-- Bottom Bar -->
-      <div class="py-6 border-t border-midnight-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p class="text-sm text-foam-500">
           © 2024 CraftBrew Catalog. All rights reserved.
         </p>
