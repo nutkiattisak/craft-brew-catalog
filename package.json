@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "craft-brew-catalog",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,15 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@vueuse/core": "^14.0.0",
-    "lucide-vue-next": "^0.554.0",
-    "nuxt": "^3.11.2",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "@vueuse/core": "^12.0.0",
+    "lucide-vue-next": "^0.468.0",
+    "nuxt": "^4.0.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.14.0",
-    "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.19"
-  }
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
 }
