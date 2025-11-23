@@ -61,3 +61,21 @@ export type BrewingCategory = 'ales' | 'lagers' | 'high-gravity' | 'hoppy' | 'ex
 export type FilterTag = 'all' | 'ales' | 'lagers' | 'high-gravity' | 'hoppy' | 'experimental'
 
 export type SortOption = 'newest' | 'top-rated' | 'difficulty' | 'abv' | 'ibu'
+
+export interface BeerStyle {
+  id: string
+  name: string
+  category: 'ales' | 'lagers' | 'hybrid' | 'wild'
+  origin: string
+  description: string
+  characteristics: {
+    abvRange: string
+    ibuRange: string
+    srmRange: string
+    body: 'light' | 'medium' | 'full'
+  }
+  flavorProfile: string[]
+  foodPairings: string[]
+  popularExamples: string[]
+  image: string
+}

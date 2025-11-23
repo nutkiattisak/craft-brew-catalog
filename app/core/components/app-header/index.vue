@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { Beer, User, BookOpen, Heart, Menu } from 'lucide-vue-next'
+import { Beer, Search, Bookmark, Menu, BookOpen, FlaskConical, Calculator } from 'lucide-vue-next'
 
-const { savedRecipes, wishlist } = useBeerStore()
+const { savedRecipes } = useBeerStore()
 const isMobileMenuOpen = ref(false)
 const isScrolled = ref(false)
+
+const navLinks = [
+  { name: 'Styles', href: '/styles', icon: BookOpen },
+  { name: 'Ingredients', href: '/ingredients', icon: FlaskConical },
+  { name: 'Tools', href: '/tools', icon: Calculator },
+  { name: 'Guides', href: '/guides', icon: BookOpen },
+]
 
 if (typeof window !== 'undefined') {
   window.addEventListener('scroll', () => {
@@ -39,18 +46,14 @@ if (typeof window !== 'undefined') {
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center gap-8">
-          <a href="#" class="text-foam-300 hover:text-amber-400 transition-colors font-medium"
-            >Discover</a
+          <NuxtLink
+            v-for="link in navLinks"
+            :key="link.name"
+            :to="link.href"
+            class="text-foam-300 hover:text-amber-400 transition-colors font-medium"
           >
-          <a href="#" class="text-foam-300 hover:text-amber-400 transition-colors font-medium"
-            >Breweries</a
-          >
-          <a href="#" class="text-foam-300 hover:text-amber-400 transition-colors font-medium"
-            >Events</a
-          >
-          <a href="#" class="text-foam-300 hover:text-amber-400 transition-colors font-medium"
-            >About</a
-          >
+            {{ link.name }}
+          </NuxtLink>
         </nav>
 
         <!-- Actions -->
@@ -58,23 +61,17 @@ if (typeof window !== 'undefined') {
           <!-- Theme Toggle -->
           <ThemeToggle />
 
-          <!-- Wishlist -->
+          <!-- Search -->
           <UiButton variant="ghost" size="icon" class="relative">
-            <Heart
-              class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 group-hover:text-amber-400 transition-colors"
+            <Search
+              class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 hover:text-amber-400 transition-colors"
             />
-            <span
-              v-if="wishlist.length > 0"
-              class="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-midnight-950 text-xs font-bold rounded-full flex items-center justify-center"
-            >
-              {{ wishlist.length }}
-            </span>
           </UiButton>
 
-          <!-- Saved Recipes -->
+          <!-- Saved Recipes (Bookmark) -->
           <UiButton variant="ghost" size="icon" class="relative">
-            <BookOpen
-              class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 group-hover:text-amber-400 transition-colors"
+            <Bookmark
+              class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 hover:text-amber-400 transition-colors"
             />
             <span
               v-if="savedRecipes.length > 0"
@@ -82,12 +79,6 @@ if (typeof window !== 'undefined') {
             >
               {{ savedRecipes.length }}
             </span>
-          </UiButton>
-
-          <!-- User Profile / My Cellar -->
-          <UiButton variant="outline" class="hidden sm:flex">
-            <User class="w-5 h-5" />
-            <span class="text-sm font-medium">My Cellar</span>
           </UiButton>
 
           <!-- Mobile Menu Button -->
@@ -116,41 +107,28 @@ if (typeof window !== 'undefined') {
               <UiSeparator class="my-4" />
 
               <nav class="space-y-2">
-                <a
-                  href="#"
-                  class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
+                <NuxtLink
+                  v-for="link in navLinks"
+                  :key="link.name"
+                  :to="link.href"
+                  class="flex items-center gap-3 px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
+                  @click="isMobileMenuOpen = false"
                 >
-                  Discover
-                </a>
-                <a
-                  href="#"
-                  class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
-                >
-                  Breweries
-                </a>
-                <a
-                  href="#"
-                  class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
-                >
-                  Events
-                </a>
-                <a
-                  href="#"
-                  class="flex items-center px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
-                >
-                  About
-                </a>
+                  <component :is="link.icon" class="w-5 h-5" />
+                  {{ link.name }}
+                </NuxtLink>
               </nav>
 
               <UiSeparator class="my-4" />
 
-              <a
-                href="#"
+              <NuxtLink
+                to="/saved"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-foam-200 hover:bg-midnight-800 hover:text-amber-400 transition-colors"
+                @click="isMobileMenuOpen = false"
               >
-                <User class="w-5 h-5" />
-                My Cellar
-              </a>
+                <Bookmark class="w-5 h-5" />
+                Saved Recipes
+              </NuxtLink>
             </UiSheetContent>
           </UiSheet>
         </div>
