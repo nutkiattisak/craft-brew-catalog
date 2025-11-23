@@ -2,10 +2,18 @@
 import { Search } from 'lucide-vue-next'
 
 const { setSearchQuery, searchQuery } = useBeerStore()
+const { gsap } = useGsap()
 const localSearch = ref(searchQuery.value)
 
 // Hero image URL for LCP optimization
 const heroImageUrl = 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80'
+
+// Template refs for GSAP animations
+const heroTitle = ref<HTMLElement | null>(null)
+const heroSubtitle = ref<HTMLElement | null>(null)
+const heroCtas = ref<HTMLElement | null>(null)
+const heroSearch = ref<HTMLElement | null>(null)
+const heroStats = ref<HTMLElement | null>(null)
 
 function handleSearch() {
   setSearchQuery(localSearch.value)
@@ -21,6 +29,54 @@ function handleTagClick(tag: string) {
   localSearch.value = tag
   handleSearch()
 }
+
+// GSAP animations on mount
+onMounted(() => {
+  if (import.meta.client) {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+    // Animate hero elements in sequence using fromTo for proper opacity control
+    if (heroTitle.value) {
+      tl.fromTo(heroTitle.value, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
+    }
+
+    if (heroSubtitle.value) {
+      tl.fromTo(
+        heroSubtitle.value,
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        '-=0.6'
+      )
+    }
+
+    if (heroCtas.value) {
+      tl.fromTo(
+        heroCtas.value.children,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 },
+        '-=0.4'
+      )
+    }
+
+    if (heroSearch.value) {
+      tl.fromTo(
+        heroSearch.value,
+        { y: 30, opacity: 0, scale: 0.95 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.8 },
+        '-=0.3'
+      )
+    }
+
+    if (heroStats.value) {
+      tl.fromTo(
+        heroStats.value.children,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, stagger: 0.1 },
+        '-=0.4'
+      )
+    }
+  }
+})
 </script>
 
 <template>
@@ -58,25 +114,25 @@ function handleTagClick(tag: string) {
     <!-- Content -->
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
       <!-- Heading -->
-      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-foam-50 mb-6 animate-slide-up">
+      <h1
+        ref="heroTitle"
+        class="text-4xl sm:text-5xl lg:text-7xl font-bold text-foam-50 mb-6 opacity-0"
+      >
         Explore the World of
         <span class="block text-gradient mt-2">Craft Beer</span>
       </h1>
 
       <!-- Subheading -->
       <p
-        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8 animate-slide-up"
-        style="animation-delay: 0.1s"
+        ref="heroSubtitle"
+        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8 opacity-0"
       >
         Your complete guide to beer styles, brewing ingredients, and essential tools. Master the art
         of craft brewing.
       </p>
 
       <!-- CTA Buttons -->
-      <div
-        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up"
-        style="animation-delay: 0.15s"
-      >
+      <div ref="heroCtas" class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
         <NuxtLink to="/styles">
           <UiButton
             class="bg-amber-500 text-slate-900 font-bold hover:bg-amber-400 px-8 py-3 text-lg"
@@ -95,7 +151,7 @@ function handleTagClick(tag: string) {
       </div>
 
       <!-- Search Bar -->
-      <div class="max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.2s">
+      <div ref="heroSearch" class="max-w-2xl mx-auto opacity-0">
         <div class="relative group">
           <div
             class="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-600/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"
@@ -134,10 +190,7 @@ function handleTagClick(tag: string) {
       </div>
 
       <!-- Stats -->
-      <div
-        class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16 animate-fade-in"
-        style="animation-delay: 0.4s"
-      >
+      <div ref="heroStats" class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16">
         <div class="text-center">
           <div class="text-2xl lg:text-3xl font-bold text-gradient">100+</div>
           <div class="text-sm text-foam-400 mt-1">Beer Styles</div>
