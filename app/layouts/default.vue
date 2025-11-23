@@ -1,5 +1,9 @@
 <script setup lang="ts">
 // Default layout with header and footer
+// Lazy load the modal component for better initial load performance
+const LazyBeerDetailModal = defineAsyncComponent(
+  () => import('~/core/components/beer-detail-modal/index.vue')
+)
 </script>
 
 <template>
@@ -15,20 +19,28 @@
     <!-- Footer -->
     <AppFooter />
 
-    <!-- Beer Detail Modal -->
-    <BeerDetailModal />
+    <!-- Beer Detail Modal - Lazy loaded -->
+    <ClientOnly>
+      <LazyBeerDetailModal />
+    </ClientOnly>
   </div>
 </template>
 
 <style>
-/* Smooth scrolling for the whole page */
-html {
-  scroll-behavior: smooth;
-}
-
 /* Prevent layout shift when modal opens */
 body.modal-open {
   overflow: hidden;
   padding-right: var(--scrollbar-width, 0);
+}
+
+/* Optimize scrollbar width calculation */
+:root {
+  --scrollbar-width: 0px;
+}
+
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 </style>

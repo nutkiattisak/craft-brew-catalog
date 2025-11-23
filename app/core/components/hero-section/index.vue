@@ -4,6 +4,9 @@ import { Search } from 'lucide-vue-next'
 const { setSearchQuery, searchQuery } = useBeerStore()
 const localSearch = ref(searchQuery.value)
 
+// Hero image URL for LCP optimization
+const heroImageUrl = 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80'
+
 function handleSearch() {
   setSearchQuery(localSearch.value)
 }
@@ -24,13 +27,21 @@ function handleTagClick(tag: string) {
   <section
     class="relative min-h-[70vh] lg:min-h-[100vh] flex items-center justify-center overflow-hidden"
   >
-    <!-- Background Image with Overlay -->
+    <!-- Background Image with Overlay - Optimized for LCP -->
     <div class="absolute inset-0 z-0">
-      <div
-        class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style="
-          background-image: url('https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80');
-        "
+      <!-- Use NuxtImg for optimized image loading -->
+      <NuxtImg
+        :src="heroImageUrl"
+        alt="Craft beer background"
+        class="absolute inset-0 w-full h-full object-cover"
+        width="1920"
+        height="1080"
+        format="webp"
+        quality="80"
+        loading="eager"
+        fetchpriority="high"
+        sizes="100vw"
+        :placeholder="[20, 11, 10]"
       />
       <div
         class="absolute inset-0 bg-gradient-to-b from-midnight-950/80 via-midnight-950/70 to-midnight-950"
