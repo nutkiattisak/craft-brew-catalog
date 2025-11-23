@@ -130,7 +130,9 @@ const getIconColor = (toolId: string) => {
           <h3 class="text-lg font-semibold text-foam-100 mb-4">Quick Tips</h3>
           <div class="grid gap-4 sm:grid-cols-3">
             <div class="flex gap-3">
-              <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center"
+              >
                 <Percent class="w-4 h-4 text-amber-400" />
               </div>
               <div>
@@ -141,7 +143,9 @@ const getIconColor = (toolId: string) => {
               </div>
             </div>
             <div class="flex gap-3">
-              <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"
+              >
                 <Droplets class="w-4 h-4 text-green-400" />
               </div>
               <div>
@@ -152,7 +156,9 @@ const getIconColor = (toolId: string) => {
               </div>
             </div>
             <div class="flex gap-3">
-              <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center"
+              >
                 <Palette class="w-4 h-4 text-orange-400" />
               </div>
               <div>

@@ -79,7 +79,7 @@ const srmToColor = computed(() => {
   return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`
 })
 
-const colorLevel = computed(() => {
+const _colorLevel = computed(() => {
   if (totalSrm.value === 0) return 'default'
   if (totalSrm.value > 35) return 'black'
   if (totalSrm.value > 18) return 'brown'

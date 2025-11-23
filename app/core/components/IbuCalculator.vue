@@ -8,9 +8,7 @@ interface HopAddition {
 
 const batchSize = ref<number | null>(20)
 const originalGravity = ref<number | null>(1.05)
-const hopAdditions = ref<HopAddition[]>([
-  { id: 1, weight: null, alphaAcid: null, boilTime: null },
-])
+const hopAdditions = ref<HopAddition[]>([{ id: 1, weight: null, alphaAcid: null, boilTime: null }])
 
 let nextId = 2
 
@@ -261,18 +259,9 @@ const bitternessLabel = computed(() => {
       </div>
       <div class="relative h-4 overflow-hidden rounded-full bg-midnight-950">
         <!-- Threshold markers -->
-        <div
-          class="absolute top-0 h-full w-px bg-foam-400/30"
-          :style="{ left: '20%' }"
-        />
-        <div
-          class="absolute top-0 h-full w-px bg-foam-400/30"
-          :style="{ left: '40%' }"
-        />
-        <div
-          class="absolute top-0 h-full w-px bg-foam-400/30"
-          :style="{ left: '60%' }"
-        />
+        <div class="absolute top-0 h-full w-px bg-foam-400/30" :style="{ left: '20%' }" />
+        <div class="absolute top-0 h-full w-px bg-foam-400/30" :style="{ left: '40%' }" />
+        <div class="absolute top-0 h-full w-px bg-foam-400/30" :style="{ left: '60%' }" />
 
         <!-- Filled gauge -->
         <div
