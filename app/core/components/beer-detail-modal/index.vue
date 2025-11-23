@@ -3,7 +3,7 @@ import {
   Star,
   MapPin,
   Heart,
-  ShoppingCart,
+  BookOpen,
   Share2,
   Beef,
   Sandwich,
@@ -13,6 +13,8 @@ import {
   Drumstick,
   CircleDot,
   Pizza,
+  Beaker,
+  Gauge,
 } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
@@ -21,9 +23,9 @@ const {
   isModalOpen,
   closeBeerModal,
   toggleWishlist,
-  addToCart,
+  saveRecipe,
   isInWishlist,
-  isInCart,
+  isRecipeSaved,
 } = useBeerStore()
 
 // Food pairing icons mapping
@@ -44,6 +46,33 @@ const foodIcons: Record<string, Component> = {
   pretzel: Cookie,
   duck: Drumstick,
   bacon: Beef,
+  'thai food': Sandwich,
+  sushi: Fish,
+  mussels: Fish,
+  'roasted chicken': Drumstick,
+  'fish and chips': Fish,
+  'shepherd pie': Sandwich,
+  cheddar: CircleDot,
+  'fruit tart': Cookie,
+  cheesecake: Cookie,
+  pretzels: Cookie,
+}
+
+function getDifficultyColor(difficulty: string): string {
+  switch (difficulty) {
+    case 'easy':
+      return 'bg-green-500/20 text-green-400 border-green-500/50'
+    case 'medium':
+      return 'bg-amber-500/20 text-amber-400 border-amber-500/50'
+    case 'hard':
+      return 'bg-red-500/20 text-red-400 border-red-500/50'
+    default:
+      return 'bg-slate-500/20 text-slate-400 border-slate-500/50'
+  }
+}
+
+function getDifficultyLabel(difficulty: string): string {
+  return difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
 }
 
 function handleShare() {
@@ -107,23 +136,56 @@ const formattedDate = (dateStr: string) => {
               </div>
             </div>
 
+            <!-- Difficulty Badge -->
+            <div class="flex items-center gap-3 mt-2">
+              <UiBadge
+                :class="getDifficultyColor(selectedBeer.difficulty)"
+                class="flex items-center gap-1 border"
+              >
+                <Gauge class="w-3 h-3" />
+                {{ getDifficultyLabel(selectedBeer.difficulty) }} Difficulty
+              </UiBadge>
+            </div>
+
             <!-- Stats Row -->
-            <div class="flex items-center gap-6 py-4">
-              <UiSeparator orientation="vertical" class="hidden" />
-              <div class="flex items-center gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4">
+              <div
+                class="flex items-center gap-2 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+              >
                 <Star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                <span class="text-lg font-bold text-foam-100">{{ selectedBeer.rating }}</span>
-                <span class="text-sm text-foam-400">({{ selectedBeer.reviewCount }})</span>
+                <div>
+                  <div class="text-lg font-bold text-foam-100">{{ selectedBeer.rating }}</div>
+                  <div class="text-xs text-foam-400">Rating</div>
+                </div>
               </div>
-              <UiSeparator orientation="vertical" class="h-8" />
-              <div class="text-center">
-                <div class="text-lg font-bold text-amber-400">{{ selectedBeer.abv }}%</div>
-                <div class="text-xs text-foam-400">ABV</div>
+              <div
+                class="flex items-center gap-2 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+              >
+                <Beaker class="w-5 h-5 text-amber-400" />
+                <div>
+                  <div class="text-lg font-bold text-amber-400">{{ selectedBeer.abv }}%</div>
+                  <div class="text-xs text-foam-400">ABV</div>
+                </div>
               </div>
-              <UiSeparator orientation="vertical" class="h-8" />
-              <div class="text-center">
-                <div class="text-lg font-bold text-foam-100">{{ selectedBeer.ibu }}</div>
-                <div class="text-xs text-foam-400">IBU</div>
+              <div
+                class="flex items-center gap-2 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+              >
+                <Beaker class="w-5 h-5 text-amber-400" />
+                <div>
+                  <div class="text-lg font-bold text-foam-100">
+                    {{ selectedBeer.og.toFixed(3) }}
+                  </div>
+                  <div class="text-xs text-foam-400">OG</div>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-2 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+              >
+                <Gauge class="w-5 h-5 text-amber-400" />
+                <div>
+                  <div class="text-lg font-bold text-foam-100">{{ selectedBeer.ibu }}</div>
+                  <div class="text-xs text-foam-400">IBU</div>
+                </div>
               </div>
             </div>
 
@@ -205,13 +267,29 @@ const formattedDate = (dateStr: string) => {
 
             <UiSeparator />
 
+            <!-- Technical Specs Summary -->
+            <div
+              class="flex items-center gap-4 p-4 rounded-lg bg-midnight-800/30 border border-midnight-700/30"
+            >
+              <div class="flex-1">
+                <div class="text-sm text-foam-400 mb-1">Final Gravity</div>
+                <span class="text-2xl font-bold text-foam-50">{{
+                  selectedBeer.fg.toFixed(3)
+                }}</span>
+              </div>
+              <UiSeparator orientation="vertical" class="h-12" />
+              <div class="flex-1 text-center">
+                <div class="text-sm text-foam-400 mb-1">Attenuation</div>
+                <span class="text-2xl font-bold text-amber-400">
+                  {{
+                    Math.round(((selectedBeer.og - selectedBeer.fg) / (selectedBeer.og - 1)) * 100)
+                  }}%
+                </span>
+              </div>
+            </div>
+
             <!-- Actions -->
             <div class="flex items-center gap-3">
-              <div class="flex-1">
-                <span class="text-3xl font-bold text-foam-50"
-                  >${{ selectedBeer.price.toFixed(2) }}</span
-                >
-              </div>
               <UiButton
                 variant="outline"
                 size="icon"
@@ -236,16 +314,17 @@ const formattedDate = (dateStr: string) => {
                 <Share2 class="w-5 h-5" />
               </UiButton>
               <UiButton
-                :variant="isInCart(selectedBeer.id) ? 'outline' : 'default'"
+                :variant="isRecipeSaved(selectedBeer.id) ? 'outline' : 'default'"
+                class="flex-1"
                 :class="
-                  isInCart(selectedBeer.id)
+                  isRecipeSaved(selectedBeer.id)
                     ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                    : ''
+                    : 'bg-amber-500/20 text-amber-400 border-amber-500/50 hover:bg-amber-500/30'
                 "
-                @click="addToCart(selectedBeer.id)"
+                @click="saveRecipe(selectedBeer.id)"
               >
-                <ShoppingCart class="w-5 h-5" />
-                {{ isInCart(selectedBeer.id) ? 'Added to Cart' : 'Add to Cart' }}
+                <BookOpen class="w-5 h-5" />
+                {{ isRecipeSaved(selectedBeer.id) ? 'Recipe Saved' : 'Save Recipe' }}
               </UiButton>
             </div>
           </div>

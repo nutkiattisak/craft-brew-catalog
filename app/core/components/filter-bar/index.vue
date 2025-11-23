@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Hop, Wheat, Cherry, Moon, Apple, Flame, Filter, ChevronDown, Check } from 'lucide-vue-next'
+import { Beer, Thermometer, Hop, FlaskConical, Layers, ChevronDown, Check } from 'lucide-vue-next'
 import type { FilterTag, SortOption } from '~/core/types/beer'
 
 import type { Component } from 'vue'
@@ -13,21 +13,20 @@ interface FilterOption {
 }
 
 const filters: FilterOption[] = [
-  { id: 'all', label: 'All Beers', icon: Filter },
+  { id: 'all', label: 'All Styles', icon: Layers },
+  { id: 'ales', label: 'Ales', icon: Beer },
+  { id: 'lagers', label: 'Lagers', icon: Thermometer },
+  { id: 'high-gravity', label: 'High Gravity', icon: FlaskConical },
   { id: 'hoppy', label: 'Hoppy', icon: Hop },
-  { id: 'malty', label: 'Malty', icon: Wheat },
-  { id: 'sour', label: 'Sour', icon: Cherry },
-  { id: 'dark', label: 'Dark', icon: Moon },
-  { id: 'fruit', label: 'Fruit', icon: Apple },
-  { id: 'high-abv', label: 'High ABV', icon: Flame },
+  { id: 'experimental', label: 'Experimental', icon: FlaskConical },
 ]
 
 const sortOptions: { id: SortOption; label: string }[] = [
   { id: 'newest', label: 'Newest' },
   { id: 'top-rated', label: 'Top Rated' },
-  { id: 'price-low', label: 'Price: Low to High' },
-  { id: 'price-high', label: 'Price: High to Low' },
+  { id: 'difficulty', label: 'Difficulty' },
   { id: 'abv', label: 'ABV: High to Low' },
+  { id: 'ibu', label: 'IBU: High to Low' },
 ]
 
 function handleFilterClick(filter: FilterTag) {

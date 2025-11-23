@@ -16,6 +16,8 @@ export interface Review {
   date: string
 }
 
+export type DifficultyLevel = 'easy' | 'medium' | 'hard'
+
 export interface Beer {
   id: string
   name: string
@@ -24,7 +26,9 @@ export interface Beer {
   style: string
   abv: number
   ibu: number
-  price: number
+  og: number // Original Gravity
+  fg: number // Final Gravity
+  difficulty: DifficultyLevel
   image: string
   description: string
   tastingNotes: string
@@ -36,8 +40,11 @@ export interface Beer {
   isNew?: boolean
   isFeatured?: boolean
   tags: string[]
+  category: BrewingCategory
 }
 
-export type FilterTag = 'hoppy' | 'malty' | 'sour' | 'dark' | 'fruit' | 'high-abv' | 'all'
+export type BrewingCategory = 'ales' | 'lagers' | 'high-gravity' | 'hoppy' | 'experimental'
 
-export type SortOption = 'newest' | 'top-rated' | 'price-low' | 'price-high' | 'abv'
+export type FilterTag = 'all' | 'ales' | 'lagers' | 'high-gravity' | 'hoppy' | 'experimental'
+
+export type SortOption = 'newest' | 'top-rated' | 'difficulty' | 'abv' | 'ibu'

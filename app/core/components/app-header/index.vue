@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Beer, User, ShoppingCart, Heart, Menu } from 'lucide-vue-next'
+import { Beer, User, BookOpen, Heart, Menu } from 'lucide-vue-next'
 
-const { cart, wishlist } = useBeerStore()
+const { savedRecipes, wishlist } = useBeerStore()
 const isMobileMenuOpen = ref(false)
 const isScrolled = ref(false)
 
@@ -71,16 +71,16 @@ if (typeof window !== 'undefined') {
             </span>
           </UiButton>
 
-          <!-- Cart -->
+          <!-- Saved Recipes -->
           <UiButton variant="ghost" size="icon" class="relative">
-            <ShoppingCart
+            <BookOpen
               class="w-5 h-5 lg:w-6 lg:h-6 text-foam-300 group-hover:text-amber-400 transition-colors"
             />
             <span
-              v-if="cart.length > 0"
+              v-if="savedRecipes.length > 0"
               class="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-midnight-950 text-xs font-bold rounded-full flex items-center justify-center"
             >
-              {{ cart.length }}
+              {{ savedRecipes.length }}
             </span>
           </UiButton>
 

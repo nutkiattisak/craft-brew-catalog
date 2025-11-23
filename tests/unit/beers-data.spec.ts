@@ -16,7 +16,10 @@ describe('Mock Beers Data', () => {
       expect(beer).toHaveProperty('style')
       expect(beer).toHaveProperty('abv')
       expect(beer).toHaveProperty('ibu')
-      expect(beer).toHaveProperty('price')
+      expect(beer).toHaveProperty('og')
+      expect(beer).toHaveProperty('fg')
+      expect(beer).toHaveProperty('difficulty')
+      expect(beer).toHaveProperty('category')
       expect(beer).toHaveProperty('description')
       expect(beer).toHaveProperty('flavorProfile')
       expect(beer).toHaveProperty('rating')
@@ -31,9 +34,31 @@ describe('Mock Beers Data', () => {
     })
   })
 
-  it('should have valid price values (greater than 0)', () => {
+  it('should have valid OG values (between 1.000 and 1.200)', () => {
     mockBeers.forEach((beer: Beer) => {
-      expect(beer.price).toBeGreaterThan(0)
+      expect(beer.og).toBeGreaterThanOrEqual(1.0)
+      expect(beer.og).toBeLessThanOrEqual(1.2)
+    })
+  })
+
+  it('should have valid FG values (between 1.000 and 1.050)', () => {
+    mockBeers.forEach((beer: Beer) => {
+      expect(beer.fg).toBeGreaterThanOrEqual(1.0)
+      expect(beer.fg).toBeLessThanOrEqual(1.05)
+    })
+  })
+
+  it('should have valid difficulty levels', () => {
+    const validDifficulties = ['easy', 'medium', 'hard']
+    mockBeers.forEach((beer: Beer) => {
+      expect(validDifficulties).toContain(beer.difficulty)
+    })
+  })
+
+  it('should have valid category values', () => {
+    const validCategories = ['ales', 'lagers', 'high-gravity', 'hoppy', 'experimental']
+    mockBeers.forEach((beer: Beer) => {
+      expect(validCategories).toContain(beer.category)
     })
   })
 
@@ -79,7 +104,7 @@ describe('Mock Beers Data', () => {
   })
 
   it('should have valid tags', () => {
-    const validTags = ['hoppy', 'malty', 'sour', 'dark', 'fruit', 'high-abv']
+    const validTags = ['ales', 'lagers', 'high-gravity', 'hoppy', 'experimental']
     mockBeers.forEach((beer: Beer) => {
       beer.tags.forEach((tag: string) => {
         expect(validTags).toContain(tag)
