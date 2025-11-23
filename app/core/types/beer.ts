@@ -79,3 +79,19 @@ export interface BeerStyle {
   popularExamples: string[]
   image: string
 }
+
+export type GuideCategory = 'beginner' | 'intermediate' | 'advanced' | 'equipment' | 'ingredients'
+
+export interface Guide {
+  id: string
+  title: string
+  slug: string
+  category: GuideCategory
+  description: string
+  readTime: string
+  author: string
+  publishedAt: string
+  image: string
+  tags: string[]
+  featured?: boolean
+}
