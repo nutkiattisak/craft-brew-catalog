@@ -9,7 +9,7 @@ const sortOption = ref<SortOption>('newest')
 const selectedBeer = ref<Beer | null>(null)
 const isModalOpen = ref(false)
 const wishlist = ref<string[]>([])
-const cart = ref<string[]>([])
+const savedRecipes = ref<string[]>([])
 
 export function useBeerStore() {
   const filteredBeers = computed(() => {
@@ -26,26 +26,24 @@ export function useBeerStore() {
       )
     }
 
-    // Apply tag filter
+    // Apply category filter
     if (activeFilter.value !== 'all') {
       result = result.filter((beer) => {
         switch (activeFilter.value) {
+          case 'ales':
+            return beer.category === 'ales' || beer.tags.includes('ales')
+          case 'lagers':
+            return beer.category === 'lagers' || beer.tags.includes('lagers')
+          case 'high-gravity':
+            return beer.category === 'high-gravity' || beer.og >= 1.07 || beer.abv >= 8.0
           case 'hoppy':
-            return beer.flavorProfile.hoppy >= 70 || beer.tags.includes('hoppy')
-          case 'malty':
-            return beer.flavorProfile.malty >= 70 || beer.tags.includes('malty')
-          case 'sour':
-            return beer.flavorProfile.sour >= 50 || beer.tags.includes('sour')
-          case 'dark':
             return (
-              beer.style.toLowerCase().includes('stout') ||
-              beer.style.toLowerCase().includes('porter') ||
-              beer.tags.includes('dark')
+              beer.category === 'hoppy' ||
+              beer.flavorProfile.hoppy >= 70 ||
+              beer.tags.includes('hoppy')
             )
-          case 'fruit':
-            return beer.flavorProfile.fruity >= 60 || beer.tags.includes('fruit')
-          case 'high-abv':
-            return beer.abv >= 7.0 || beer.tags.includes('high-abv')
+          case 'experimental':
+            return beer.category === 'experimental' || beer.tags.includes('experimental')
           default:
             return true
         }
@@ -60,14 +58,16 @@ export function useBeerStore() {
       case 'top-rated':
         result.sort((a, b) => b.rating - a.rating)
         break
-      case 'price-low':
-        result.sort((a, b) => a.price - b.price)
+      case 'difficulty': {
+        const difficultyOrder = { easy: 1, medium: 2, hard: 3 }
+        result.sort((a, b) => difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty])
         break
-      case 'price-high':
-        result.sort((a, b) => b.price - a.price)
-        break
+      }
       case 'abv':
         result.sort((a, b) => b.abv - a.abv)
+        break
+      case 'ibu':
+        result.sort((a, b) => b.ibu - a.ibu)
         break
     }
 
@@ -111,9 +111,9 @@ export function useBeerStore() {
     }
   }
 
-  function addToCart(beerId: string) {
-    if (!cart.value.includes(beerId)) {
-      cart.value.push(beerId)
+  function saveRecipe(beerId: string) {
+    if (!savedRecipes.value.includes(beerId)) {
+      savedRecipes.value.push(beerId)
     }
   }
 
@@ -121,8 +121,8 @@ export function useBeerStore() {
     return wishlist.value.includes(beerId)
   }
 
-  function isInCart(beerId: string) {
-    return cart.value.includes(beerId)
+  function isRecipeSaved(beerId: string) {
+    return savedRecipes.value.includes(beerId)
   }
 
   return {
@@ -133,7 +133,7 @@ export function useBeerStore() {
     selectedBeer,
     isModalOpen,
     wishlist,
-    cart,
+    savedRecipes,
     filteredBeers,
     featuredBeers,
     newBeers,
@@ -143,8 +143,8 @@ export function useBeerStore() {
     openBeerModal,
     closeBeerModal,
     toggleWishlist,
-    addToCart,
+    saveRecipe,
     isInWishlist,
-    isInCart,
+    isRecipeSaved,
   }
 }

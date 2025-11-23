@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Heart, ShoppingCart, Star, Sparkles } from 'lucide-vue-next'
+import { Heart, BookOpen, Star, Sparkles, Gauge, Beaker } from 'lucide-vue-next'
 import type { Beer } from '~/core/types/beer'
 
 interface Props {
@@ -11,7 +11,7 @@ const emit = defineEmits<{
   (e: 'click', beer: Beer): void
 }>()
 
-const { toggleWishlist, addToCart, isInWishlist, isInCart } = useBeerStore()
+const { toggleWishlist, isInWishlist } = useBeerStore()
 
 function handleCardClick() {
   emit('click', props.beer)
@@ -22,9 +22,9 @@ function handleWishlistClick(e: Event) {
   toggleWishlist(props.beer.id)
 }
 
-function handleCartClick(e: Event) {
+function handleViewRecipe(e: Event) {
   e.stopPropagation()
-  addToCart(props.beer.id)
+  emit('click', props.beer)
 }
 
 function getBitternessLevel(ibu: number): number {
@@ -33,6 +33,23 @@ function getBitternessLevel(ibu: number): number {
   if (ibu <= 50) return 3
   if (ibu <= 70) return 4
   return 5
+}
+
+function getDifficultyColor(difficulty: string): string {
+  switch (difficulty) {
+    case 'easy':
+      return 'bg-green-500/20 text-green-400 border-green-500/50'
+    case 'medium':
+      return 'bg-amber-500/20 text-amber-400 border-amber-500/50'
+    case 'hard':
+      return 'bg-red-500/20 text-red-400 border-red-500/50'
+    default:
+      return 'bg-slate-500/20 text-slate-400 border-slate-500/50'
+  }
+}
+
+function getDifficultyLabel(difficulty: string): string {
+  return difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
 }
 </script>
 
@@ -58,6 +75,14 @@ function getBitternessLevel(ibu: number): number {
           New
         </UiBadge>
         <UiBadge v-if="beer.isFeatured" variant="purple"> Featured </UiBadge>
+        <!-- Difficulty Badge -->
+        <UiBadge
+          :class="getDifficultyColor(beer.difficulty)"
+          class="flex items-center gap-1 border"
+        >
+          <Gauge class="w-3 h-3" />
+          {{ getDifficultyLabel(beer.difficulty) }}
+        </UiBadge>
       </div>
 
       <!-- Wishlist Button -->
@@ -104,6 +129,28 @@ function getBitternessLevel(ibu: number): number {
       </h3>
       <p class="text-sm text-foam-400 mt-0.5">{{ beer.brewery }}</p>
 
+      <!-- Technical Specs: OG & IBU -->
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <div
+          class="flex items-center gap-2 p-2 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+        >
+          <Beaker class="w-4 h-4 text-amber-400" />
+          <div class="flex flex-col">
+            <span class="text-xs text-foam-500">OG</span>
+            <span class="text-sm font-semibold text-foam-100">{{ beer.og.toFixed(3) }}</span>
+          </div>
+        </div>
+        <div
+          class="flex items-center gap-2 p-2 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+        >
+          <Gauge class="w-4 h-4 text-amber-400" />
+          <div class="flex flex-col">
+            <span class="text-xs text-foam-500">IBU</span>
+            <span class="text-sm font-semibold text-foam-100">{{ beer.ibu }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Bitterness Scale -->
       <div class="mt-3">
         <div class="flex items-center justify-between mb-1">
@@ -120,23 +167,16 @@ function getBitternessLevel(ibu: number): number {
         </div>
       </div>
 
-      <!-- Price & Action -->
-      <div class="flex items-center justify-between mt-4 pt-4 border-t border-midnight-700/50">
-        <div>
-          <span class="text-2xl font-bold text-foam-50">${{ beer.price.toFixed(2) }}</span>
-        </div>
+      <!-- Action Button -->
+      <div class="flex items-center justify-center mt-4 pt-4 border-t border-midnight-700/50">
         <UiButton
-          :variant="isInCart(beer.id) ? 'outline' : 'default'"
+          variant="default"
           size="sm"
-          :class="
-            isInCart(beer.id)
-              ? 'bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30'
-              : ''
-          "
-          @click="handleCartClick"
+          class="w-full bg-amber-500/20 text-amber-400 border border-amber-500/50 hover:bg-amber-500/30"
+          @click="handleViewRecipe"
         >
-          <ShoppingCart class="w-4 h-4" />
-          <span class="text-sm font-semibold">{{ isInCart(beer.id) ? 'Added' : 'Add' }}</span>
+          <BookOpen class="w-4 h-4" />
+          <span class="text-sm font-semibold">View Recipe</span>
         </UiButton>
       </div>
     </UiCardContent>
