@@ -67,12 +67,19 @@ const getTypeLabel = (type: string) => {
   <div
     class="group relative bg-midnight-900/50 backdrop-blur-sm border border-midnight-800 rounded-2xl overflow-hidden hover:border-amber-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/10"
   >
-    <!-- Image -->
-    <div class="relative h-40 overflow-hidden">
-      <img
+    <!-- Image with fixed dimensions to prevent CLS -->
+    <div class="relative h-40 overflow-hidden bg-midnight-800">
+      <NuxtImg
         :src="ingredient.image"
         :alt="ingredient.name"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        width="400"
+        height="160"
+        format="webp"
+        quality="70"
+        loading="lazy"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        :placeholder="[20, 8, 10]"
       />
       <div
         class="absolute inset-0 bg-gradient-to-t from-midnight-950 via-midnight-950/50 to-transparent"

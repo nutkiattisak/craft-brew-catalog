@@ -55,12 +55,19 @@ function getDifficultyLabel(difficulty: string): string {
 
 <template>
   <UiCard class="group relative overflow-hidden card-hover cursor-pointer" @click="handleCardClick">
-    <!-- Image Container -->
-    <div class="relative aspect-[3/4] overflow-hidden">
-      <img
+    <!-- Image Container with fixed aspect ratio to prevent CLS -->
+    <div class="relative aspect-[3/4] overflow-hidden bg-midnight-800">
+      <NuxtImg
         :src="beer.image"
         :alt="beer.name"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        width="400"
+        height="600"
+        format="webp"
+        quality="75"
+        loading="lazy"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        :placeholder="[16, 24, 10]"
       />
 
       <!-- Gradient Overlay -->

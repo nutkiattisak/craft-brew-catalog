@@ -59,12 +59,19 @@ function handleShare() {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
           <!-- Left Column - Image & Quick Info -->
           <div class="space-y-4">
-            <!-- Image -->
+            <!-- Image with fixed dimensions to prevent CLS -->
             <div class="relative aspect-square rounded-xl overflow-hidden bg-midnight-800">
-              <img
+              <NuxtImg
                 :src="selectedBeer.image"
                 :alt="selectedBeer.name"
                 class="w-full h-full object-cover"
+                width="500"
+                height="500"
+                format="webp"
+                quality="80"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                :placeholder="[20, 20, 10]"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-midnight-950/60 to-transparent" />
 
