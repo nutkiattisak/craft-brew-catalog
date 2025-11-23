@@ -2,8 +2,16 @@
 import { Search, Beer, Flame, Droplets, Palette } from 'lucide-vue-next'
 import { beerStyles } from '~/core/data/styles'
 
+const { gsap, cleanup } = useGsap()
+
 const searchQuery = ref('')
 const selectedCategory = ref<'all' | 'ales' | 'lagers' | 'hybrid' | 'wild'>('all')
+
+// Template refs for animations
+const pageTitle = ref<HTMLElement | null>(null)
+const pageSubtitle = ref<HTMLElement | null>(null)
+const searchSection = ref<HTMLElement | null>(null)
+const stylesGrid = ref<HTMLElement | null>(null)
 
 const categories = [
   { value: 'all', label: 'All Styles' },
@@ -38,6 +46,61 @@ const getCategoryColor = (category: string) => {
       return 'bg-slate-500/20 text-slate-400 border-slate-500/30'
   }
 }
+
+// GSAP animations
+onMounted(() => {
+  if (import.meta.client) {
+    // Hero section animations
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+    if (pageTitle.value) {
+      tl.fromTo(pageTitle.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
+    }
+
+    if (pageSubtitle.value) {
+      tl.fromTo(
+        pageSubtitle.value,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6 },
+        '-=0.4'
+      )
+    }
+
+    if (searchSection.value) {
+      tl.fromTo(
+        searchSection.value,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6 },
+        '-=0.3'
+      )
+    }
+
+    // Scroll-triggered grid animation
+    if (stylesGrid.value) {
+      gsap.fromTo(
+        stylesGrid.value.children,
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: stylesGrid.value,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      )
+    }
+  }
+})
+
+// Cleanup scroll triggers on unmount
+onUnmounted(() => {
+  cleanup()
+})
 </script>
 
 <template>
@@ -52,17 +115,17 @@ const getCategoryColor = (category: string) => {
 
       <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h1 class="text-4xl sm:text-5xl font-bold text-foam-50 mb-4">
+          <h1 ref="pageTitle" class="text-4xl sm:text-5xl font-bold text-foam-50 mb-4 opacity-0">
             Beer <span class="text-gradient">Styles</span> Encyclopedia
           </h1>
-          <p class="text-lg text-foam-300 max-w-2xl mx-auto">
+          <p ref="pageSubtitle" class="text-lg text-foam-300 max-w-2xl mx-auto opacity-0">
             Explore the diverse world of beer styles. From crisp lagers to bold stouts, discover the
             characteristics that make each style unique.
           </p>
         </div>
 
         <!-- Search and Filter -->
-        <div class="max-w-3xl mx-auto space-y-4">
+        <div ref="searchSection" class="max-w-3xl mx-auto space-y-4 opacity-0">
           <!-- Search Bar -->
           <div class="relative">
             <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foam-400" />
@@ -104,7 +167,7 @@ const getCategoryColor = (category: string) => {
         </div>
 
         <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref="stylesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="style in filteredStyles"
             :key="style.id"

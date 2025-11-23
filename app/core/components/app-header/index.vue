@@ -34,7 +34,6 @@ if (typeof window !== 'undefined') {
             >
               <Beer class="w-5 h-5 lg:w-6 lg:h-6 text-midnight-950" />
             </div>
-            <div class="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full animate-pulse" />
           </div>
           <div class="hidden sm:block">
             <h1 class="text-lg lg:text-xl font-bold text-foam-50">

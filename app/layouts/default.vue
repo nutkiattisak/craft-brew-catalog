@@ -1,14 +1,23 @@
 <script setup lang="ts">
 // Default layout with header and footer
-// Lazy load the modal component for better initial load performance
-const LazyBeerDetailModal = defineAsyncComponent(
+// Lazy hydration for non-critical components to improve FCP/LCP
+
+// Footer hydrates when visible (user scrolls down)
+const LazyAppFooter = defineLazyHydrationComponent(
+  'visible',
+  () => import('~/core/components/app-footer/index.vue')
+)
+
+// Modal hydrates on interaction (when user clicks a beer card)
+const LazyBeerDetailModal = defineLazyHydrationComponent(
+  'idle',
   () => import('~/core/components/beer-detail-modal/index.vue')
 )
 </script>
 
 <template>
   <div class="min-h-screen bg-midnight-950">
-    <!-- Header -->
+    <!-- Header - loads immediately (critical for navigation) -->
     <AppHeader />
 
     <!-- Main Content -->
@@ -16,12 +25,12 @@ const LazyBeerDetailModal = defineAsyncComponent(
       <slot />
     </main>
 
-    <!-- Footer -->
-    <AppFooter />
+    <!-- Footer - hydrates when visible -->
+    <LazyAppFooter :hydrate-on-visible="{ rootMargin: '200px' }" />
 
-    <!-- Beer Detail Modal - Lazy loaded -->
+    <!-- Beer Detail Modal - hydrates when browser is idle -->
     <ClientOnly>
-      <LazyBeerDetailModal />
+      <LazyBeerDetailModal :hydrate-on-idle="3000" />
     </ClientOnly>
   </div>
 </template>
