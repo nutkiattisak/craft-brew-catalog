@@ -16,6 +16,17 @@ export interface Review {
   date: string
 }
 
+export interface Ingredients {
+  malt: string[]
+  hops: string[]
+  yeast: string
+}
+
+export interface BrewersTip {
+  id: string
+  tip: string
+}
+
 export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 
 export interface Beer {
@@ -35,6 +46,8 @@ export interface Beer {
   flavorProfile: FlavorProfile
   foodPairings: string[]
   reviews: Review[]
+  ingredients: Ingredients
+  brewersTips: BrewersTip[]
   rating: number
   reviewCount: number
   isNew?: boolean
