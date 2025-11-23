@@ -174,23 +174,33 @@ function handleShare() {
               </h3>
               <div class="space-y-3">
                 <!-- Malt -->
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50">
+                <div
+                  class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+                >
                   <Wheat class="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <span class="text-xs text-foam-400 uppercase tracking-wider">Malt</span>
-                    <p class="text-sm text-foam-200">{{ selectedBeer.ingredients.malt.join(', ') }}</p>
+                    <p class="text-sm text-foam-200">
+                      {{ selectedBeer.ingredients.malt.join(', ') }}
+                    </p>
                   </div>
                 </div>
                 <!-- Hops -->
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50">
+                <div
+                  class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+                >
                   <Hop class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <span class="text-xs text-foam-400 uppercase tracking-wider">Hops</span>
-                    <p class="text-sm text-foam-200">{{ selectedBeer.ingredients.hops.join(', ') }}</p>
+                    <p class="text-sm text-foam-200">
+                      {{ selectedBeer.ingredients.hops.join(', ') }}
+                    </p>
                   </div>
                 </div>
                 <!-- Yeast -->
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50">
+                <div
+                  class="flex items-start gap-3 p-3 rounded-lg bg-midnight-800/50 border border-midnight-700/50"
+                >
                   <FlaskConical class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <span class="text-xs text-foam-400 uppercase tracking-wider">Yeast</span>

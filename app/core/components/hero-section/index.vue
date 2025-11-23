@@ -54,12 +54,34 @@ function handleTagClick(tag: string) {
 
       <!-- Subheading -->
       <p
-        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-10 animate-slide-up"
+        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8 animate-slide-up"
         style="animation-delay: 0.1s"
       >
-        From hoppy IPAs to rich stouts, discover your next favorite brew from the finest craft
-        breweries around the globe.
+        Your complete guide to beer styles, brewing ingredients, and essential tools. Master the art
+        of craft brewing.
       </p>
+
+      <!-- CTA Buttons -->
+      <div
+        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up"
+        style="animation-delay: 0.15s"
+      >
+        <NuxtLink to="/styles">
+          <UiButton
+            class="bg-amber-500 text-slate-900 font-bold hover:bg-amber-400 px-8 py-3 text-lg"
+          >
+            Explore Styles
+          </UiButton>
+        </NuxtLink>
+        <NuxtLink to="/tools">
+          <UiButton
+            variant="outline"
+            class="border-2 border-amber-500 text-amber-500 hover:bg-amber-500/10 px-8 py-3 text-lg"
+          >
+            ABV Calculator
+          </UiButton>
+        </NuxtLink>
+      </div>
 
       <!-- Search Bar -->
       <div class="max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.2s">
@@ -106,16 +128,16 @@ function handleTagClick(tag: string) {
         style="animation-delay: 0.4s"
       >
         <div class="text-center">
-          <div class="text-2xl lg:text-3xl font-bold text-gradient">500+</div>
-          <div class="text-sm text-foam-400 mt-1">Craft Beers</div>
+          <div class="text-2xl lg:text-3xl font-bold text-gradient">100+</div>
+          <div class="text-sm text-foam-400 mt-1">Beer Styles</div>
         </div>
         <div class="text-center border-x border-midnight-700">
-          <div class="text-2xl lg:text-3xl font-bold text-gradient">150+</div>
-          <div class="text-sm text-foam-400 mt-1">Breweries</div>
+          <div class="text-2xl lg:text-3xl font-bold text-gradient">200+</div>
+          <div class="text-sm text-foam-400 mt-1">Ingredients</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl lg:text-3xl font-bold text-gradient">50+</div>
-          <div class="text-sm text-foam-400 mt-1">Countries</div>
+          <div class="text-2xl lg:text-3xl font-bold text-gradient">10+</div>
+          <div class="text-sm text-foam-400 mt-1">Brewing Tools</div>
         </div>
       </div>
     </div>
