@@ -72,18 +72,30 @@ export default defineNuxtConfig({
           manualChunks: {
             'vue-vendor': ['vue', 'vue-router'],
             'ui-vendor': ['radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+            gsap: ['gsap'],
           },
         },
       },
       // Reduce chunk size warnings threshold
       chunkSizeWarningLimit: 500,
+      // Enable CSS code splitting
+      cssCodeSplit: true,
+      // Minification options
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
     },
   },
 
   // Experimental features for better performance
   experimental: {
-    viewTransition: true,
+    viewTransition: false, // Disabled for better mobile performance
     componentIslands: true,
+    payloadExtraction: true, // Extract payload for better hydration
   },
 
   // Route rules for caching and prerendering
@@ -96,12 +108,20 @@ export default defineNuxtConfig({
 
   // Nitro configuration for server optimization
   nitro: {
-    compressPublicAssets: true,
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true,
+    },
     minify: true,
     prerender: {
       crawlLinks: true,
       failOnError: false,
       ignore: ['/guides'],
+    },
+    // Optimize response headers for better caching
+    routeRules: {
+      '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+      '/assets/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     },
   },
 
@@ -146,31 +166,15 @@ export default defineNuxtConfig({
       link: [
         // Canonical URL for SEO
         { rel: 'canonical', href: 'https://craft-brew-catalog.vercel.app' },
-        // DNS prefetch for external resources
-        { rel: 'dns-prefetch', href: 'https://images.unsplash.com' },
-        { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
-        { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
-        // Preconnect for critical resources
+        // Preconnect for critical external resources only
         { rel: 'preconnect', href: 'https://images.unsplash.com', crossorigin: '' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        // Optimized font loading - reduced weights (400, 500, 600, 700 only)
-        {
-          rel: 'preload',
-          as: 'style',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-          media: 'print',
-          onload: "this.media='all'",
-        },
+        // DNS prefetch for non-critical resources
+        { rel: 'dns-prefetch', href: 'https://images.unsplash.com' },
         // Preload hero image for LCP optimization
         {
           rel: 'preload',
           as: 'image',
-          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80',
+          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80&fm=webp',
           fetchpriority: 'high',
         },
         // SEO: Sitemap
@@ -178,13 +182,6 @@ export default defineNuxtConfig({
           rel: 'sitemap',
           type: 'application/xml',
           href: '/sitemap.xml',
-        },
-      ],
-      // Noscript fallback for font loading
-      noscript: [
-        {
-          innerHTML:
-            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">',
         },
       ],
     },

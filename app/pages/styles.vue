@@ -2,7 +2,7 @@
 import { Search, Beer, Flame, Droplets, Palette } from 'lucide-vue-next'
 import { beerStyles } from '~/core/data/styles'
 
-const { gsap, cleanup } = useGsap()
+const { gsap, isPageInteractive, cleanup } = useGsap()
 
 const searchQuery = ref('')
 const selectedCategory = ref<'all' | 'ales' | 'lagers' | 'hybrid' | 'wild'>('all')
@@ -47,53 +47,62 @@ const getCategoryColor = (category: string) => {
   }
 }
 
-// GSAP animations
+// Optimized GSAP animations with deferred execution
 onMounted(() => {
   if (import.meta.client) {
-    // Hero section animations
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    // Wait for page interactive before running animations
+    watch(
+      isPageInteractive,
+      (interactive) => {
+        if (interactive) {
+          // Simplified hero animations
+          const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
-    if (pageTitle.value) {
-      tl.fromTo(pageTitle.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
-    }
+          if (pageTitle.value) {
+            tl.fromTo(pageTitle.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 })
+          }
 
-    if (pageSubtitle.value) {
-      tl.fromTo(
-        pageSubtitle.value,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6 },
-        '-=0.4'
-      )
-    }
+          if (pageSubtitle.value) {
+            tl.fromTo(
+              pageSubtitle.value,
+              { y: 20, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3 },
+              '-=0.2'
+            )
+          }
 
-    if (searchSection.value) {
-      tl.fromTo(
-        searchSection.value,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6 },
-        '-=0.3'
-      )
-    }
+          if (searchSection.value) {
+            tl.fromTo(
+              searchSection.value,
+              { y: 15, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3 },
+              '-=0.15'
+            )
+          }
 
-    // Scroll-triggered grid animation
-    if (stylesGrid.value) {
-      gsap.fromTo(
-        stylesGrid.value.children,
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: stylesGrid.value,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
+          // Optimized scroll-triggered grid animation
+          if (stylesGrid.value) {
+            gsap.fromTo(
+              stylesGrid.value.children,
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.4,
+                stagger: 0.05,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: stylesGrid.value,
+                  start: 'top 90%',
+                  toggleActions: 'play none none none',
+                },
+              }
+            )
+          }
         }
-      )
-    }
+      },
+      { immediate: true }
+    )
   }
 })
 
