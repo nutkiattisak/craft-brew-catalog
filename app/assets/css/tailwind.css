@@ -4,8 +4,9 @@
 /* Custom theme configuration for Tailwind CSS v4 */
 @theme {
   /* Font family - optimized system fonts for zero font loading delay */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
-    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
 
   /* Midnight Pub Theme Colors */
   --color-midnight-950: #0a0a0b;

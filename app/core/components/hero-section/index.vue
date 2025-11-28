@@ -60,7 +60,7 @@ onMounted(() => {
         height="720"
         loading="lazy"
         decoding="async"
-        style="animation-delay: 0.1s; animation-fill-mode: forwards; animation-duration: 0.6s;"
+        style="animation-delay: 0.1s; animation-fill-mode: forwards; animation-duration: 0.6s"
       />
 
       <!-- Overlays for depth -->
@@ -73,7 +73,9 @@ onMounted(() => {
     </div>
 
     <!-- Decorative Elements - reduced complexity for better performance -->
-    <div class="absolute top-20 left-10 w-64 h-64 bg-amber-500/10 rounded-full blur-xl opacity-40" />
+    <div
+      class="absolute top-20 left-10 w-64 h-64 bg-amber-500/10 rounded-full blur-xl opacity-40"
+    />
     <div
       class="absolute bottom-20 right-10 w-80 h-80 bg-amber-600/5 rounded-full blur-xl opacity-40"
     />
