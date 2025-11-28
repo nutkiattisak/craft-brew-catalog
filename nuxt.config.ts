@@ -6,6 +6,13 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/eslint', '@nuxtjs/color-mode', '@nuxt/image'],
 
+  // Runtime configuration
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://craft-brew-catalog.vercel.app',
+    },
+  },
+
   colorMode: {
     classSuffix: '',
     preference: 'dark',
@@ -115,8 +122,30 @@ export default defineNuxtConfig({
         // Performance hints
         { name: 'color-scheme', content: 'dark light' },
         { name: 'theme-color', content: '#0a0a0b' },
+        // SEO Meta Tags
+        { name: 'robots', content: 'index, follow' },
+        { name: 'googlebot', content: 'index, follow' },
+        // Open Graph
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'Craft Brew Catalog | Premium Beer Discovery' },
+        {
+          property: 'og:description',
+          content:
+            'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.',
+        },
+        { property: 'og:site_name', content: 'Craft Brew Catalog' },
+        // Twitter Card
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'Craft Brew Catalog | Premium Beer Discovery' },
+        {
+          name: 'twitter:description',
+          content:
+            'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.',
+        },
       ],
       link: [
+        // Canonical URL for SEO
+        { rel: 'canonical', href: 'https://craft-brew-catalog.vercel.app' },
         // DNS prefetch for external resources
         { rel: 'dns-prefetch', href: 'https://images.unsplash.com' },
         { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
@@ -143,6 +172,12 @@ export default defineNuxtConfig({
           as: 'image',
           href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80',
           fetchpriority: 'high',
+        },
+        // SEO: Sitemap
+        {
+          rel: 'sitemap',
+          type: 'application/xml',
+          href: '/sitemap.xml',
         },
       ],
       // Noscript fallback for font loading
