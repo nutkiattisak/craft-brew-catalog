@@ -3,7 +3,7 @@ import { Search, BookOpen, Clock, User, Calendar } from 'lucide-vue-next'
 import { guides } from '~/core/data/guides'
 import type { GuideCategory } from '~/core/types/beer'
 
-const { gsap, cleanup } = useGsap()
+const { gsap, isPageInteractive, cleanup } = useGsap()
 
 const searchQuery = ref('')
 const selectedCategory = ref<'all' | GuideCategory>('all')
@@ -63,61 +63,69 @@ const formatDate = (dateString: string) => {
   })
 }
 
-// GSAP animations
+// Optimized GSAP animations with deferred execution
 onMounted(() => {
   if (import.meta.client) {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    watch(
+      isPageInteractive,
+      (interactive) => {
+        if (interactive) {
+          const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
 
-    if (pageTitle.value) {
-      tl.fromTo(pageTitle.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
-    }
+          if (pageTitle.value) {
+            tl.fromTo(pageTitle.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 })
+          }
 
-    if (pageSubtitle.value) {
-      tl.fromTo(
-        pageSubtitle.value,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6 },
-        '-=0.4'
-      )
-    }
+          if (pageSubtitle.value) {
+            tl.fromTo(
+              pageSubtitle.value,
+              { y: 20, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3 },
+              '-=0.2'
+            )
+          }
 
-    if (searchSection.value) {
-      tl.fromTo(
-        searchSection.value,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6 },
-        '-=0.3'
-      )
-    }
+          if (searchSection.value) {
+            tl.fromTo(
+              searchSection.value,
+              { y: 15, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3 },
+              '-=0.15'
+            )
+          }
 
-    if (featuredSection.value) {
-      tl.fromTo(
-        featuredSection.value.children,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, stagger: 0.15 },
-        '-=0.2'
-      )
-    }
+          if (featuredSection.value) {
+            tl.fromTo(
+              featuredSection.value.children,
+              { y: 25, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.4, stagger: 0.08 },
+              '-=0.1'
+            )
+          }
 
-    // Scroll-triggered grid animation
-    if (guidesGrid.value) {
-      gsap.fromTo(
-        guidesGrid.value.children,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: guidesGrid.value,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
+          // Optimized scroll-triggered grid animation
+          if (guidesGrid.value) {
+            gsap.fromTo(
+              guidesGrid.value.children,
+              { y: 30, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.4,
+                stagger: 0.05,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: guidesGrid.value,
+                  start: 'top 90%',
+                  toggleActions: 'play none none none',
+                },
+              }
+            )
+          }
         }
-      )
-    }
+      },
+      { immediate: true }
+    )
   }
 })
 

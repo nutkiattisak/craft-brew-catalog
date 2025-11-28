@@ -1,130 +1,184 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Register GSAP plugins
-if (import.meta.client) {
-  gsap.registerPlugin(ScrollTrigger)
+// Lazy register GSAP plugins only when needed
+let pluginsRegistered = false
+
+function ensurePluginsRegistered() {
+  if (import.meta.client && !pluginsRegistered) {
+    gsap.registerPlugin(ScrollTrigger)
+    pluginsRegistered = true
+  }
 }
 
 export function useGsap() {
-  // Fade in from bottom animation
-  const fadeInUp = (element: string | Element | Element[], options: gsap.TweenVars = {}) => {
-    return gsap.from(element, {
-      y: 60,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      ...options,
-    })
-  }
+  // Defer animations until after page interactive
+  const isPageInteractive = ref(false)
 
-  // Fade in animation
-  const fadeIn = (element: string | Element | Element[], options: gsap.TweenVars = {}) => {
+  onMounted(() => {
+    if (import.meta.client) {
+      // Wait for page to be interactive before running animations
+      if (document.readyState === 'complete') {
+        isPageInteractive.value = true
+        ensurePluginsRegistered()
+      } else {
+        window.addEventListener('load', () => {
+          // Use requestIdleCallback to defer non-critical animations
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(
+              () => {
+                isPageInteractive.value = true
+                ensurePluginsRegistered()
+              },
+              { timeout: 500 }
+            )
+          } else {
+            setTimeout(() => {
+              isPageInteractive.value = true
+              ensurePluginsRegistered()
+            }, 100)
+          }
+        })
+      }
+    }
+  })
+  // Optimized fade in from bottom animation - reduced duration
+  const fadeInUp = (element: string | Element | Element[], options: gsap.TweenVars = {}) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(element, {
+      y: 40,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.5,
       ease: 'power2.out',
       ...options,
     })
   }
 
-  // Stagger animation for multiple elements
+  // Optimized fade in animation
+  const fadeIn = (element: string | Element | Element[], options: gsap.TweenVars = {}) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
+    return gsap.from(element, {
+      opacity: 0,
+      duration: 0.4,
+      ease: 'power2.out',
+      ...options,
+    })
+  }
+
+  // Optimized stagger animation for multiple elements
   const staggerFadeInUp = (
     elements: string | Element | Element[],
     options: gsap.TweenVars = {}
   ) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(elements, {
-      y: 40,
+      y: 30,
       opacity: 0,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: 'power3.out',
+      duration: 0.4,
+      stagger: 0.08,
+      ease: 'power2.out',
       ...options,
     })
   }
 
-  // Scale in animation
+  // Optimized scale in animation
   const scaleIn = (element: string | Element | Element[], options: gsap.TweenVars = {}) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(element, {
-      scale: 0.8,
+      scale: 0.95,
       opacity: 0,
-      duration: 0.6,
-      ease: 'back.out(1.7)',
+      duration: 0.4,
+      ease: 'power2.out',
       ...options,
     })
   }
 
-  // Scroll trigger animation
+  // Optimized scroll trigger animation
   const scrollFadeIn = (element: string | Element, options: ScrollTrigger.Vars = {}) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(element, {
-      y: 50,
+      y: 30,
       opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
+      duration: 0.5,
+      ease: 'power2.out',
       scrollTrigger: {
         trigger: element,
         start: 'top 85%',
-        end: 'top 50%',
-        toggleActions: 'play none none reverse',
+        toggleActions: 'play none none none',
         ...options,
       },
     })
   }
 
-  // Scroll trigger for staggered elements
+  // Optimized scroll trigger for staggered elements
   const scrollStagger = (
     container: string | Element,
     children: string,
     options: gsap.TweenVars = {}
   ) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(children, {
-      y: 40,
+      y: 30,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power3.out',
+      duration: 0.4,
+      stagger: 0.06,
+      ease: 'power2.out',
       scrollTrigger: {
         trigger: container,
-        start: 'top 80%',
-        toggleActions: 'play none none reverse',
+        start: 'top 85%',
+        toggleActions: 'play none none none',
       },
       ...options,
     })
   }
 
-  // Parallax effect
+  // Disabled parallax for better performance (optional)
   const parallax = (element: string | Element, speed: number = 0.5) => {
+    // Parallax disabled for mobile performance
+    if (!isPageInteractive.value || window.innerWidth < 768) return null
+    ensurePluginsRegistered()
     return gsap.to(element, {
-      yPercent: -50 * speed,
+      yPercent: -30 * speed,
       ease: 'none',
       scrollTrigger: {
         trigger: element,
         start: 'top bottom',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
       },
     })
   }
 
-  // Text reveal animation
+  // Optimized text reveal animation
   const textReveal = (element: string | Element, options: gsap.TweenVars = {}) => {
+    if (!isPageInteractive.value) return null
+    ensurePluginsRegistered()
     return gsap.from(element, {
-      y: '100%',
+      y: '50%',
       opacity: 0,
-      duration: 1,
-      ease: 'power4.out',
+      duration: 0.5,
+      ease: 'power2.out',
       ...options,
     })
   }
 
   // Cleanup function for scroll triggers
   const cleanup = () => {
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+    if (import.meta.client) {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+    }
   }
 
   return {
     gsap,
     ScrollTrigger,
+    isPageInteractive,
     fadeInUp,
     fadeIn,
     staggerFadeInUp,
