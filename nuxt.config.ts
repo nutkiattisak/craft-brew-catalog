@@ -35,11 +35,6 @@ export default defineNuxtConfig({
       xxl: 1536,
     },
     domains: ['images.unsplash.com'],
-    // Preload configuration
-    preload: {
-      // Don't preload images by default to improve LCP
-      default: false,
-    },
   },
 
   components: {
@@ -99,7 +94,6 @@ export default defineNuxtConfig({
     viewTransition: false, // Disabled for better mobile performance
     componentIslands: true,
     payloadExtraction: true, // Extract payload for better hydration
-    inlineSSRStyles: false, // Disable to reduce HTML size, let browser load CSS in parallel
   },
 
   // Optimize features for production
