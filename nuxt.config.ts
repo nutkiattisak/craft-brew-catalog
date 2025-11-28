@@ -24,8 +24,8 @@ export default defineNuxtConfig({
     // Use none provider to use native <img> with optimization attributes
     // This prevents IPX errors during SSG build with external images
     provider: 'none',
-    quality: 80,
-    format: ['webp'],
+    quality: 75,
+    format: ['webp', 'avif'],
     screens: {
       xs: 320,
       sm: 640,
@@ -35,6 +35,11 @@ export default defineNuxtConfig({
       xxl: 1536,
     },
     domains: ['images.unsplash.com'],
+    // Preload configuration
+    preload: {
+      // Don't preload images by default to improve LCP
+      default: false,
+    },
   },
 
   components: {
@@ -80,14 +85,12 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 500,
       // Enable CSS code splitting
       cssCodeSplit: true,
-      // Minification options
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-      },
+      // Minification options - esbuild is faster than terser
+      minify: 'esbuild',
+      // Target modern browsers for smaller bundles
+      target: 'es2020',
+      // Optimize CSS
+      cssMinify: 'lightningcss',
     },
   },
 
@@ -96,6 +99,12 @@ export default defineNuxtConfig({
     viewTransition: false, // Disabled for better mobile performance
     componentIslands: true,
     payloadExtraction: true, // Extract payload for better hydration
+    inlineSSRStyles: false, // Disable to reduce HTML size, let browser load CSS in parallel
+  },
+
+  // Optimize features for production
+  features: {
+    inlineStyles: false, // Don't inline styles to reduce HTML size
   },
 
   // Route rules for caching and prerendering
@@ -139,9 +148,12 @@ export default defineNuxtConfig({
           content:
             'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.',
         },
-        // Performance hints
+        // Performance hints for better rendering
         { name: 'color-scheme', content: 'dark light' },
         { name: 'theme-color', content: '#0a0a0b' },
+        { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
+        // Optimize resource loading
+        { 'http-equiv': 'x-dns-prefetch-control', content: 'on' },
         // SEO Meta Tags
         { name: 'robots', content: 'index, follow' },
         { name: 'googlebot', content: 'index, follow' },
@@ -166,17 +178,8 @@ export default defineNuxtConfig({
       link: [
         // Canonical URL for SEO
         { rel: 'canonical', href: 'https://craft-brew-catalog.vercel.app' },
-        // Preconnect for critical external resources only
-        { rel: 'preconnect', href: 'https://images.unsplash.com', crossorigin: '' },
-        // DNS prefetch for non-critical resources
+        // Preconnect for external resources - lazy loaded so not critical
         { rel: 'dns-prefetch', href: 'https://images.unsplash.com' },
-        // Preload hero image for LCP optimization
-        {
-          rel: 'preload',
-          as: 'image',
-          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80&fm=webp',
-          fetchpriority: 'high',
-        },
         // SEO: Sitemap
         {
           rel: 'sitemap',

@@ -4,9 +4,13 @@ import { Search } from 'lucide-vue-next'
 const { setSearchQuery, searchQuery } = useBeerStore()
 const localSearch = ref(searchQuery.value)
 
-// Optimized hero image URL with format and quality params
+// Ultra-optimized hero image - much smaller dimensions and quality for faster LCP
+// Using blur effect on Unsplash side to reduce file size even more
 const heroImageUrl =
-  'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=75&fm=webp&fit=crop'
+  'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=40&fm=webp&fit=crop&blur=2'
+
+// Track if image has loaded for progressive enhancement
+const imageLoaded = ref(false)
 
 function handleSearch() {
   setSearchQuery(localSearch.value)
@@ -22,42 +26,56 @@ function handleTagClick(tag: string) {
   localSearch.value = tag
   handleSearch()
 }
+
+onMounted(() => {
+  // Preload the hero image after mount for progressive enhancement
+  if (import.meta.client) {
+    const img = new Image()
+    img.src = heroImageUrl
+    img.onload = () => {
+      imageLoaded.value = true
+    }
+  }
+})
 </script>
 
 <template>
   <section
     class="relative min-h-[70vh] lg:min-h-[100vh] flex items-center justify-center overflow-hidden"
   >
-    <!-- Background Image with Overlay - Optimized for LCP -->
+    <!-- Background - CSS gradients render instantly (no LCP delay) -->
     <div class="absolute inset-0 z-0">
-      <!-- Use NuxtImg for optimized image loading with explicit dimensions -->
-      <NuxtImg
+      <!-- Rich gradient background for instant render - dark amber/brown tones for beer theme -->
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-amber-950 via-midnight-900 to-midnight-950"
+      />
+
+      <!-- Progressive enhancement: Load optimized image after initial render -->
+      <img
+        v-if="imageLoaded"
         :src="heroImageUrl"
-        alt="Craft beer background"
-        class="absolute inset-0 w-full h-full object-cover"
-        width="1920"
-        height="1080"
-        format="webp"
-        quality="75"
-        loading="eager"
-        fetchpriority="high"
-        sizes="100vw"
-        :placeholder="[30, 17, 75, 10]"
-        decoding="sync"
-        style="content-visibility: auto"
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover opacity-0 animate-fade-in"
+        width="1280"
+        height="720"
+        loading="lazy"
+        decoding="async"
+        style="animation-delay: 0.1s; animation-fill-mode: forwards; animation-duration: 0.6s;"
+      />
+
+      <!-- Overlays for depth -->
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-midnight-950/60 via-midnight-950/50 to-midnight-950/90"
       />
       <div
-        class="absolute inset-0 bg-gradient-to-b from-midnight-950/80 via-midnight-950/70 to-midnight-950"
-      />
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-midnight-950/50 via-transparent to-midnight-950/50"
+        class="absolute inset-0 bg-gradient-to-r from-midnight-950/40 via-transparent to-midnight-950/40"
       />
     </div>
 
-    <!-- Decorative Elements - reduced blur for better performance -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl opacity-50" />
+    <!-- Decorative Elements - reduced complexity for better performance -->
+    <div class="absolute top-20 left-10 w-64 h-64 bg-amber-500/10 rounded-full blur-xl opacity-40" />
     <div
-      class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/5 rounded-full blur-2xl opacity-50"
+      class="absolute bottom-20 right-10 w-80 h-80 bg-amber-600/5 rounded-full blur-xl opacity-40"
     />
 
     <!-- Content -->
