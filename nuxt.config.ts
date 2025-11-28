@@ -166,17 +166,6 @@ export default defineNuxtConfig({
       link: [
         // Canonical URL for SEO
         { rel: 'canonical', href: 'https://craft-brew-catalog.vercel.app' },
-        // Preconnect for critical external resources only
-        { rel: 'preconnect', href: 'https://images.unsplash.com', crossorigin: '' },
-        // DNS prefetch for non-critical resources
-        { rel: 'dns-prefetch', href: 'https://images.unsplash.com' },
-        // Preload hero image for LCP optimization
-        {
-          rel: 'preload',
-          as: 'image',
-          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80&fm=webp',
-          fetchpriority: 'high',
-        },
         // SEO: Sitemap
         {
           rel: 'sitemap',

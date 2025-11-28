@@ -4,10 +4,6 @@ import { Search } from 'lucide-vue-next'
 const { setSearchQuery, searchQuery } = useBeerStore()
 const localSearch = ref(searchQuery.value)
 
-// Optimized hero image URL with format and quality params
-const heroImageUrl =
-  'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=75&fm=webp&fit=crop'
-
 function handleSearch() {
   setSearchQuery(localSearch.value)
 }
@@ -26,38 +22,31 @@ function handleTagClick(tag: string) {
 
 <template>
   <section
-    class="relative min-h-[70vh] lg:min-h-[100vh] flex items-center justify-center overflow-hidden"
+    class="relative min-h-[70vh] lg:min-h-[100vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-midnight-950 via-midnight-900 to-midnight-950"
   >
-    <!-- Background Image with Overlay - Optimized for LCP -->
+    <!-- Optimized Background - Pure CSS for instant LCP -->
     <div class="absolute inset-0 z-0">
-      <!-- Use NuxtImg for optimized image loading with explicit dimensions -->
-      <NuxtImg
-        :src="heroImageUrl"
-        alt="Craft beer background"
-        class="absolute inset-0 w-full h-full object-cover"
-        width="1920"
-        height="1080"
-        format="webp"
-        quality="75"
-        loading="eager"
-        fetchpriority="high"
-        sizes="100vw"
-        :placeholder="[30, 17, 75, 10]"
-        decoding="sync"
-        style="content-visibility: auto"
-      />
+      <!-- Gradient overlay for visual depth -->
       <div
-        class="absolute inset-0 bg-gradient-to-b from-midnight-950/80 via-midnight-950/70 to-midnight-950"
+        class="absolute inset-0 bg-gradient-to-b from-midnight-950/90 via-midnight-900/80 to-midnight-950"
       />
+      <!-- Animated gradient mesh for visual interest -->
       <div
-        class="absolute inset-0 bg-gradient-to-r from-midnight-950/50 via-transparent to-midnight-950/50"
+        class="absolute inset-0 bg-gradient-to-tr from-amber-900/5 via-transparent to-amber-800/5"
       />
     </div>
 
-    <!-- Decorative Elements - reduced blur for better performance -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl opacity-50" />
+    <!-- Decorative Elements - Pure CSS for performance -->
     <div
-      class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/5 rounded-full blur-2xl opacity-50"
+      class="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl opacity-50 animate-pulse"
+      style="animation-duration: 4s"
+    />
+    <div
+      class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/5 rounded-full blur-2xl opacity-50 animate-pulse"
+      style="animation-duration: 5s; animation-delay: 1s"
+    />
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl opacity-30"
     />
 
     <!-- Content -->
