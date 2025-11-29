@@ -16,7 +16,8 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.',
+      content:
+        'Discover premium craft beers from around the world. Explore unique flavors, styles, and breweries.',
     },
   ],
 })

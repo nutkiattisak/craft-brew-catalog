@@ -33,9 +33,11 @@ function handleTagClick(tag: string) {
       <!-- Use native img with responsive srcset for optimal LCP -->
       <img
         :src="heroImageUrl"
-        srcset="https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=640&h=360&q=70&fm=webp&fit=crop&auto=format 640w,
-                https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format 1280w,
-                https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=70&fm=webp&fit=crop&auto=format 1920w"
+        srcset="
+          https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=640&h=360&q=70&fm=webp&fit=crop&auto=format    640w,
+          https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format  1280w,
+          https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=70&fm=webp&fit=crop&auto=format 1920w
+        "
         sizes="100vw"
         alt="Craft beer background"
         class="absolute inset-0 w-full h-full object-cover"
@@ -54,7 +56,9 @@ function handleTagClick(tag: string) {
     </div>
 
     <!-- Decorative Elements - minimal blur for better LCP performance -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500/8 rounded-full blur-3xl opacity-40 will-change-[opacity]" />
+    <div
+      class="absolute top-20 left-10 w-72 h-72 bg-amber-500/8 rounded-full blur-3xl opacity-40 will-change-[opacity]"
+    />
     <div
       class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/4 rounded-full blur-3xl opacity-40 will-change-[opacity]"
     />
@@ -68,17 +72,13 @@ function handleTagClick(tag: string) {
       </h1>
 
       <!-- Subheading -->
-      <p
-        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8"
-      >
+      <p class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8">
         Your complete guide to beer styles, brewing ingredients, and essential tools. Master the art
         of craft brewing.
       </p>
 
       <!-- CTA Buttons -->
-      <div
-        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
-      >
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
         <NuxtLink to="/styles">
           <UiButton
             class="bg-amber-500 text-slate-900 font-bold hover:bg-amber-400 px-8 py-3 text-lg"
@@ -136,9 +136,7 @@ function handleTagClick(tag: string) {
       </div>
 
       <!-- Stats -->
-      <div
-        class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16"
-      >
+      <div class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16">
         <div class="text-center">
           <div class="text-2xl lg:text-3xl font-bold text-gradient">100+</div>
           <div class="text-sm text-foam-400 mt-1">Beer Styles</div>
