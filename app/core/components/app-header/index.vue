@@ -12,11 +12,24 @@ const navLinks = [
   { name: 'Guides', href: '/guides', icon: BookOpen },
 ]
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('scroll', () => {
-    isScrolled.value = window.scrollY > 50
+// Optimized scroll listener with passive flag for better performance
+onMounted(() => {
+  let ticking = false
+  const handleScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        isScrolled.value = window.scrollY > 50
+        ticking = false
+      })
+      ticking = true
+    }
+  }
+  window.addEventListener('scroll', handleScroll, { passive: true })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScroll)
   })
-}
+})
 </script>
 
 <template>
