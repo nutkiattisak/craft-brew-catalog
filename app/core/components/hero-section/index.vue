@@ -4,9 +4,9 @@ import { Search } from 'lucide-vue-next'
 const { setSearchQuery, searchQuery } = useBeerStore()
 const localSearch = ref(searchQuery.value)
 
-// Optimized hero image URL with format and quality params
+// Optimized hero image URL with reduced size for faster LCP
 const heroImageUrl =
-  'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=75&fm=webp&fit=crop'
+  'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format'
 
 function handleSearch() {
   setSearchQuery(localSearch.value)
@@ -30,21 +30,20 @@ function handleTagClick(tag: string) {
   >
     <!-- Background Image with Overlay - Optimized for LCP -->
     <div class="absolute inset-0 z-0">
-      <!-- Use NuxtImg for optimized image loading with explicit dimensions -->
-      <NuxtImg
+      <!-- Use native img with responsive srcset for optimal LCP -->
+      <img
         :src="heroImageUrl"
+        srcset="https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=640&h=360&q=70&fm=webp&fit=crop&auto=format 640w,
+                https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format 1280w,
+                https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&h=1080&q=70&fm=webp&fit=crop&auto=format 1920w"
+        sizes="100vw"
         alt="Craft beer background"
         class="absolute inset-0 w-full h-full object-cover"
-        width="1920"
-        height="1080"
-        format="webp"
-        quality="75"
+        width="1280"
+        height="720"
         loading="eager"
         fetchpriority="high"
-        sizes="100vw"
-        :placeholder="[30, 17, 75, 10]"
-        decoding="sync"
-        style="content-visibility: auto"
+        decoding="async"
       />
       <div
         class="absolute inset-0 bg-gradient-to-b from-midnight-950/80 via-midnight-950/70 to-midnight-950"
@@ -54,24 +53,23 @@ function handleTagClick(tag: string) {
       />
     </div>
 
-    <!-- Decorative Elements - reduced blur for better performance -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-2xl opacity-50" />
+    <!-- Decorative Elements - minimal blur for better LCP performance -->
+    <div class="absolute top-20 left-10 w-72 h-72 bg-amber-500/8 rounded-full blur-3xl opacity-40 will-change-[opacity]" />
     <div
-      class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/5 rounded-full blur-2xl opacity-50"
+      class="absolute bottom-20 right-10 w-96 h-96 bg-amber-600/4 rounded-full blur-3xl opacity-40 will-change-[opacity]"
     />
 
     <!-- Content -->
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-      <!-- Heading - Using CSS animation for instant display -->
-      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-foam-50 mb-6 animate-fade-in">
+      <!-- Heading - No animation for instant FCP -->
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-foam-50 mb-6">
         Explore the World of
         <span class="block text-gradient mt-2">Craft Beer</span>
       </h1>
 
       <!-- Subheading -->
       <p
-        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8 animate-fade-in"
-        style="animation-delay: 0.1s"
+        class="text-lg lg:text-xl text-foam-300 max-w-2xl mx-auto mb-8"
       >
         Your complete guide to beer styles, brewing ingredients, and essential tools. Master the art
         of craft brewing.
@@ -79,8 +77,7 @@ function handleTagClick(tag: string) {
 
       <!-- CTA Buttons -->
       <div
-        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-fade-in"
-        style="animation-delay: 0.15s"
+        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
       >
         <NuxtLink to="/styles">
           <UiButton
@@ -100,7 +97,7 @@ function handleTagClick(tag: string) {
       </div>
 
       <!-- Search Bar -->
-      <div class="max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.2s">
+      <div class="max-w-2xl mx-auto">
         <div class="relative group">
           <div
             class="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-600/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-300"
@@ -140,8 +137,7 @@ function handleTagClick(tag: string) {
 
       <!-- Stats -->
       <div
-        class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16 animate-fade-in"
-        style="animation-delay: 0.25s"
+        class="grid grid-cols-3 gap-8 max-w-lg mx-auto mt-16"
       >
         <div class="text-center">
           <div class="text-2xl lg:text-3xl font-bold text-gradient">100+</div>

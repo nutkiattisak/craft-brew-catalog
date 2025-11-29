@@ -73,6 +73,7 @@ export default defineNuxtConfig({
             'vue-vendor': ['vue', 'vue-router'],
             'ui-vendor': ['radix-vue', 'class-variance-authority', 'clsx', 'tailwind-merge'],
             gsap: ['gsap'],
+            'icons': ['lucide-vue-next'],
           },
         },
       },
@@ -86,6 +87,11 @@ export default defineNuxtConfig({
         compress: {
           drop_console: true,
           drop_debugger: true,
+          passes: 2, // Multiple passes for better compression
+          pure_funcs: ['console.log', 'console.info'], // Remove console calls
+        },
+        mangle: {
+          safari10: true, // Better Safari compatibility
         },
       },
     },
@@ -96,11 +102,18 @@ export default defineNuxtConfig({
     viewTransition: false, // Disabled for better mobile performance
     componentIslands: true,
     payloadExtraction: true, // Extract payload for better hydration
+    inlineSSRStyles: false, // Prevent inline styles bloat for better FCP
   },
 
   // Route rules for caching and prerendering
   routeRules: {
-    '/': { prerender: true },
+    '/': {
+      prerender: true,
+      // Add early hints for critical resources on homepage
+      headers: {
+        'Link': '<https://images.unsplash.com>; rel=preconnect; crossorigin',
+      }
+    },
     '/styles': { prerender: true },
     '/ingredients': { prerender: true },
     '/tools': { prerender: true },
@@ -174,8 +187,10 @@ export default defineNuxtConfig({
         {
           rel: 'preload',
           as: 'image',
-          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1920&q=80&fm=webp',
+          href: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format',
           fetchpriority: 'high',
+          imagesrcset: 'https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=640&h=360&q=70&fm=webp&fit=crop&auto=format 640w, https://images.unsplash.com/photo-1436076863939-06870fe779c2?w=1280&h=720&q=70&fm=webp&fit=crop&auto=format 1280w',
+          imagesizes: '100vw',
         },
         // SEO: Sitemap
         {
